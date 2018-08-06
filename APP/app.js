@@ -1,44 +1,63 @@
 var methodOverride = require("method-override"),
-    // LocalStrategy  = require("passport-local"),
-    bodyParser     = require("body-parser"),
-    // passport       = require("passport"),
-    express        = require("express"),
-    app            = express();
+  // LocalStrategy  = require("passport-local"),
+  bodyParser = require("body-parser"),
+  // passport       = require("passport"),
+  mysql = require('mysql'),
+  express = require("express"),
+  app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
-var indexRoutes      = require(__dirname + "/routes/index");
+var shopRoutes = require(__dirname + "/routes/shop");
+
+
+io.on('connection', function (socket) {
+  socket.on('ShopElements', function () {
+    GetShopElements(function (err, data) {
+      if (err) throw err;
+      socket.emit("ShopElementResponse", data);
+    });
+  });
+//Mangler at blive lavet
+  socket.on('ProductElement', function () {
+    GetShopElements(function (err, data) {
+      if (err) throw err;
+      socket.emit("ProductElementResponse", data);
+    });
+  });
+});
 
 // seed the database
 // seedDB();
 
-app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(express.static(__dirname + "/public"));
-app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.use(methodOverride("_method"));
-// app.use(flash());
 
-// PASSPORT CONFIGURATION
-// app.use(require("express-session")({
-//     secret: "spil",
-//     resave: false,
-//     saveUninitialized: false
-// }));
-// app.use(passport.initialize());
-// app.use(passport.session());
-// passport.use(new LocalStrategy(User.authenticate()));
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
+function GetShopElements(callback) {
+  var con = mysql.createConnection({
+    host: "192.168.4.140",
+    user: "root",
+    password: "passw0rd",
+    database: "Servicedesk"
+  });
+  con.connect(function (err) {
+    if (err) throw err;
+    con.query("CALL GetShopElements()", function (err, data) {
+      callback(err, data);
+    });
+  });
+}
 
-// app.use(function(req, res, next){
-//     res.locals.currentUser = req.user;
-//     res.locals.error = req.flash("error");
-//     res.locals.success = req.flash("success");
-//     next();
-// });
+
 
 // Routes Configurations
-app.use(indexRoutes);
+app.use(shopRoutes);
 
-app.listen(80, function () {
-    console.log("Server has started!!!");
+server.listen(80, "192.168.0.63", function () {
+  console.log("Server has started!!!");
 });
