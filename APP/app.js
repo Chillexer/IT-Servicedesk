@@ -19,8 +19,8 @@ io.on('connection', function (socket) {
     });
   });
 //Mangler at blive lavet
-  socket.on('ProductElement', function () {
-    GetShopElements(function (err, data) {
+  socket.on('ProductElement', function (ID) {
+    GetProduct(ID ,function (err, data) {
       if (err) throw err;
       socket.emit("ProductElementResponse", data);
     });
@@ -39,6 +39,18 @@ app.set("views", __dirname + "/views");
 app.use(methodOverride("_method"));
 
 function GetShopElements(callback) {
+  SQLQuery("CALL GetShopElements()", function (err, data) {
+    callback(err, data);
+  });
+}
+
+function GetProduct(ID,callback) {
+    SQLQuery("CALL GetProduct("+ ID +")", function (err, data) {
+      callback(err, data);
+    });
+}
+
+function SQLQuery(querystring, callback){
   var con = mysql.createConnection({
     host: "192.168.4.140",
     user: "root",
@@ -47,7 +59,7 @@ function GetShopElements(callback) {
   });
   con.connect(function (err) {
     if (err) throw err;
-    con.query("CALL GetShopElements()", function (err, data) {
+    con.query(querystring, function (err, data) {
       callback(err, data);
     });
   });
