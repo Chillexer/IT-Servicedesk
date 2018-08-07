@@ -68,9 +68,10 @@ function SQLQuery(querystring, callback){
 
 
 
+
 // Routes Configurations
 app.use(shopRoutes);
 
-server.listen(80, "192.168.0.63", function () {
+server.listen(80, function () {
   console.log("Server has started!!!");
 });
