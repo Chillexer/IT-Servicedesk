@@ -61,6 +61,7 @@ function SQLQuery(querystring, callback){
     if (err) throw err;
     con.query(querystring, function (err, data) {
       callback(err, data);
+      con.end();
     });
   });
 }
