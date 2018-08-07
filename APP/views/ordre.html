@@ -1,0 +1,88 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Ordre</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/lib/jquery-3.3.1/jquery-3.3.1.min.js"></script>
+  <script src="/lib/popper.js/popper.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+
+  <link rel="stylesheet" href="/css/ordre/ordre.css">
+
+</head>
+
+<body>
+  <div class="container">
+    <form id="orderForm">
+      <div class="row">
+        <div class="col">
+          <input type="text" id="email" class="form-control" placeholder="E-mail">
+        </div>
+        <div class="col">
+          <input type="number" id="id" class="form-control" placeholder="Ordre nr">
+        </div>
+        <div class="col-auto">
+          <input type="submit" class="btn btn-primary" value="Vis ordre">
+        </div>
+      </div>
+    </form>
+
+    <div class="row" id="order" style="display:none; padding-top:25px; padding-bottom:25px;">
+      <div class="col-md-12">
+        <div id="mainContentWrapper">
+          <div class="col-md-8 col-md-offset-2">
+            <div class="panel-group" id="accordion">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="items">
+                    <div class="col-md-9">
+                      <table class="table table-striped">
+                        <tbody>
+                          <tr>
+                            <td colspan="2">
+                              <b>
+                                Produkter</b>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <ul id="produkter">
+                                <li>One Job Posting Credit</li>
+                                <li>Job Distribution*</li>
+                                <li>Social Media Distribution</li>
+                                <li>Social Media Distribution</li>
+                              </ul>
+                            </td>
+                            <td id="priser">
+                              <b>$147.00
+                                <br>$147.00</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="col-md-3">
+                      <div style="text-align: center;">
+                        <h3>Total</h3>
+                        <h3>
+                          <span id="Total" style="color:green;">$147.00</span>
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/ordre/ordre.js"></script>
+</body>
+
+</html>
