@@ -40,13 +40,13 @@ module.exports ={
         var NewOrder = {model: model, storage: storage, RAM: RAM, OS: OS, firstname: firstname, lastname: lastname, address: address, mail: mail, phone: phone};
     
         var SQLQuery = this.SQLQuery;
-        var sql = "INSERT INTO Customer (FirstName, LastName, Address, Phone) VALUES ('"+firstname+"', '"+lastname+"', '"+address+"', '"+phone+"')";
+        var sql = "INSERT INTO Customer (FirstName, LastName, Address, Phone, Mail) VALUES ('"+firstname+"', '"+lastname+"', '"+address+"', '"+phone+"', '"+mail+"')";
         SQLQuery(sql,function(err,data){
-            if (err) Callback(err,data);
+            if (err) throw err;
             else{
             var sql = "INSERT INTO Waitinglist (CustomerID, ShowroomID, RAM, Lagring) VALUES ('"+customerID+"', '"+showroomID+"', '"+RAM+"', '"+storage+"')";
             SQLQuery(sql,function(err,data){
-                if (err) Callback(err,data);
+                if (err) throw err;
                 else console.log("1 record inserted");
                 Callback(err,data);
             });
