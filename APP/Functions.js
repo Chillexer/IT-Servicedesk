@@ -30,6 +30,11 @@ module.exports ={
             callback(err, data);
           });
       },
+      GetRAMOptions: function(callback) {
+        this.SQLQuery("CALL GetRAMOptions()", function (err, data) {
+          callback(err, data);
+        });
+    },
       InsertOrder: function(body,Callback){
         var model = body.model;
         var storage = body.storage;
