@@ -44,7 +44,7 @@ module.exports ={
         SQLQuery(sql,function(err,data){
             if (err) throw err;
             else{
-            var sql = "INSERT INTO Waitinglist (CustomerID, ShowroomID, RAM, Lagring) VALUES ('"+customerID+"', '"+showroomID+"', '"+RAM+"', '"+storage+"')";
+            var sql = "INSERT INTO Waitinglist (CustomerID, ShowroomID, RAM, Lagring, OS) VALUES ('"+customerID+"', '"+showroomID+"', '"+RAM+"', '"+storage+"', '"+OS+"')";
             SQLQuery(sql,function(err,data){
                 if (err) throw err;
                 else console.log("1 record inserted");
