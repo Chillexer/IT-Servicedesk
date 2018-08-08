@@ -1,5 +1,4 @@
 var id = window.location.pathname.replace( /^\D+/g, '');
-var RAMData;
 
 var socket = io.connect('localhost');
 socket.emit("RAMOptions");
@@ -9,6 +8,19 @@ socket.on("RAMOptionsResponse", function (RAMdata) {
      Init(data,RAMdata);   
     })
 });
+
+socket.emit("SQLQuery", "SELECT * FROM OSList");
+socket.on("SQLQueryResponse", function (OSdata) {
+
+console.log(OSdata);
+
+    OSdata.forEach(element => {
+        console.log(element)
+        $('#inputOS').append('<option value="'+element.OS+'">'+element.OS+'</option>');
+    });
+
+});
+
 function Init(data,RAMdata){
     var sizes = data[0][0]["DiskSizes"].split(", ");
     var disktypes = data[0][0]["DiskTypes"].split(", ");
@@ -41,20 +53,4 @@ function Init(data,RAMdata){
         }
     });
 
-
-//     console.log($('#inputRAM').eq(0).text());
-//     console.log($('#inputRAM').options[0].text);
-
-//     // Insert PC details in form
-//     $("#inputModel").val(data[0][0].PCMake + " " + data[0][0].PCModel + " " + data[0][0].CPU +", " + data[0][0].Size + "GB RAM");
-    
-//     var i;
-//     for (i = 0; i < $('#inputRAM').length; i++) {
-//         if ($('#inputRAM').options[i] < data[0][0].Size)
-//         {
-//             $('#inputRAM').remove(i);
-//         }
-//     }
-
-//     $('#inputRAM').val(data[0][0].Size);
  }
