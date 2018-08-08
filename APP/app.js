@@ -36,10 +36,17 @@ io.on('connection', function (socket) {
       socket.emit("OrderElementResponse", data);
     });
   });
+
   socket.on('RAMOptions', function () {
     SQL.GetRAMOptions(function (err, data) {
       if (err) throw err;
       socket.emit("RAMOptionsResponse", data);
+
+  socket.on('SQLQuery', function (sqlstring) {
+    SQL.SocketQuery(sqlstring, function (err, data) {
+      if (err) throw err;
+      socket.emit("SQLQueryResponse", data);
+
     });
   });
 });

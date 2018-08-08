@@ -17,18 +17,17 @@
 
 <body>
   <div class="container">
-    <form id="orderForm">
-      <div class="row">
-        <div class="col">
-          <input type="text" id="email" class="form-control" placeholder="E-mail">
-        </div>
-        <div class="col">
-          <input type="number" id="id" class="form-control" placeholder="Ordre nr">
-        </div>
-        <div class="col-auto">
-          <input type="submit" class="btn btn-primary" value="Vis ordre">
-        </div>
+
+    <form class="form-inline" style="text-align: center;" id="orderForm">
+      <div class="form-group">
+        <label class="sr-only" for="email">Email address</label>
+        <input type="email" class="form-control" id="email" placeholder="Email">
       </div>
+      <div class="form-group">
+        <label class="sr-only" for="id">Ordre nr</label>
+        <input type="number" class="form-control" id="id" placeholder="Ordre id">
+      </div>
+      <button type="submit" class="btn btn-primary">Vis ordre</button>
     </form>
 
     <div class="row" id="order" style="display:none; padding-top:25px; padding-bottom:25px;">
@@ -51,15 +50,11 @@
                           <tr>
                             <td>
                               <ul id="produkter">
-                                <li>One Job Posting Credit</li>
-                                <li>Job Distribution*</li>
-                                <li>Social Media Distribution</li>
-                                <li>Social Media Distribution</li>
+
                               </ul>
                             </td>
-                            <td id="priser">
-                              <b>$147.00
-                                <br>$147.00</b>
+                            <td>
+                              <b id="priser"></b>
                             </td>
                           </tr>
                         </tbody>
@@ -69,7 +64,8 @@
                       <div style="text-align: center;">
                         <h3>Total</h3>
                         <h3>
-                          <span id="Total" style="color:green;">$147.00</span>
+                          <span id="Total" style="color:green;">0</span>
+                          <span style="color:green;">DKK</span>
                         </h3>
                       </div>
                     </div>
