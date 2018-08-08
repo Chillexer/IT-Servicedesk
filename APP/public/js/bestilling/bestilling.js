@@ -49,7 +49,7 @@ function Init(data,RAMdata){
     RAMdata[0].forEach((element, id) => {
         console.log(element);
         if (element.Size > data[0][0].Size) {
-            $('#inputRAM').append('<option value="'+element.Size+'">'+element.Size+ ' GB RAM'+ '</option>');
+            $('#inputRAM').append('<option value="'+element.Size+'">'+element.Size+ ' GB RAM     +'+ (element.Price - data[0][0].price) +'</option>');
         }
     });
 

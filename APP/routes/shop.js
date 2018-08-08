@@ -26,7 +26,7 @@ router.get("/product/:id", function (req, res) {
     res.sendFile(path.resolve(__dirname + "/../views/product.html"));
 });
 
-router.get("/ordre/*", function (req, res) {
+router.get("/ordre*", function (req, res) {
     res.sendFile(path.resolve(__dirname + "/../views/ordre.html"));
 });
 
