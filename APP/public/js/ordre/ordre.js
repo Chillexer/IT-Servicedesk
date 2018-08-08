@@ -35,6 +35,9 @@ function Submit(ev) {
         socket.on("OrderElementResponse", function (data) {
             if (!data[0][0]) {
                 alert("Ordre Findes ikke eller mailen er forkert");
+                $("#email").prop("disabled",false);
+                $("#id").prop("disabled",false);
+                $("#orderForm").prop("disabled",false);
                 return;
             }
             $("#produkter").html("");

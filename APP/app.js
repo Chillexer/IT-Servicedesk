@@ -5,7 +5,7 @@ var methodOverride = require("method-override"),
   express = require("express"),
   app = express(),
   server = require('http').Server(app),
-  SQL = require('./Functions'),
+  SocketIO = require('./Socket.io'); 
   io = require('socket.io')(server);
 
 var shopRoutes = require(__dirname + "/routes/shop");
@@ -17,45 +17,8 @@ app.use(express.static(__dirname + "/public"));
 app.set("views", __dirname + "/views");
 app.use(methodOverride("_method"));
 
-io.on('connection', function (socket) {
-  socket.on('ShopElements', function () {
-    SQL.GetShopElements(function (err, data) {
-      if (err) throw err;
-      socket.emit("ShopElementResponse", data);
-    });
-  });
-  socket.on('ProductElement', function (ID) {
-    SQL.GetProduct(ID, function (err, data) {
-      if (err) throw err;
-      socket.emit("ProductElementResponse", data);
-    });
-  });
-  socket.on('OrderElement', function (Criteria) {
-    SQL.GetOrder(Criteria, function (err, data) {
-      if (err) throw err;
-      socket.emit("OrderElementResponse", data);
-    });
-  });
-
-  socket.on('RAMOptions', function () {
-    SQL.GetRAMOptions(function (err, data) {
-      if (err) throw err;
-      socket.emit("RAMOptionsResponse", data);
-    });
-  });
-  socket.on('SQLQuery', function (sqlstring) {
-    SQL.SocketQuery(sqlstring, function (err, data) {
-      if (err) throw err;
-      socket.emit("SQLQueryResponse", data);
-
-    });
-  });
-});
-
-
-
-
-
+// Socket.io Configurations
+io.on('connection', socket => SocketIO.Sockets(socket));
 
 // Routes Configurations
 app.use(shopRoutes);

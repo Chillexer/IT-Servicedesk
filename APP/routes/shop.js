@@ -1,7 +1,7 @@
 var express = require("express"),
     router = express.Router();
 var path = require('path');
-var SQL = require("./../Functions");
+var SQL = require("./../MySQL");
 
 
 router.post("/bestilling", function (req, res) {

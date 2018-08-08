@@ -1,4 +1,5 @@
 var id = window.location.pathname.replace( /^\D+/g, '');
+$('#showroomid').val(id);
 
 var socket = io.connect('localhost');
 socket.emit("RAMOptions");
