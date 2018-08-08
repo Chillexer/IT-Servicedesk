@@ -15,6 +15,11 @@ module.exports ={
           });
         });
       },
+      GetOrder: function(Criteria,callback){
+        this.SQLQuery("CALL GetOrder("+ Criteria.id+ ",'"+Criteria.email +"')", function (err, data) {
+          callback(err, data);
+        });
+      },
       GetShopElements: function(callback) {
         this.SQLQuery("CALL GetShopElements()", function (err, data) {
           callback(err, data);

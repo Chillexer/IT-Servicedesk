@@ -3,13 +3,19 @@ var methodOverride = require("method-override"),
   bodyParser = require("body-parser"),
   // passport       = require("passport"),
   express = require("express"),
-  app = express();
-var SQL = require('./Functions');
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+  app = express(),
+  server = require('http').Server(app),
+  SQL = require('./Functions'),
+  io = require('socket.io')(server);
 
 var shopRoutes = require(__dirname + "/routes/shop");
 
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(express.static(__dirname + "/public"));
+app.set("views", __dirname + "/views");
+app.use(methodOverride("_method"));
 
 io.on('connection', function (socket) {
   socket.on('ShopElements', function () {
@@ -24,14 +30,16 @@ io.on('connection', function (socket) {
       socket.emit("ProductElementResponse", data);
     });
   });
+  socket.on('OrderElement', function (Criteria) {
+    SQL.GetOrder(Criteria, function (err, data) {
+      if (err) throw err;
+      socket.emit("OrderElementResponse", data);
+    });
+  });
 });
 
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-app.use(express.static(__dirname + "/public"));
-app.set("views", __dirname + "/views");
-app.use(methodOverride("_method"));
+
+
 
 
 

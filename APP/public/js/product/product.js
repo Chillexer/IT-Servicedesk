@@ -5,8 +5,8 @@ var socket = io.connect('http://192.168.0.63'); //skal være http://2.106.165.19
 socket.emit("ProductElement", id);
 socket.on("ProductElementResponse", function (data) {
   //$("body").append(JSON.stringify(data));
-  var sizes = data[0][0]["DiskSizes"].split(", ");
-    var disktypes = data[0][0]["DiskTypes"].split(", ");
+  var sizes = data[0][0].DiskSizes.split(", ");
+    var disktypes = data[0][0].DiskTypes.split(", ");
     var Diskstring = "";
     sizes.forEach((element,id) => {
         Diskstring += element + " " + disktypes[id];
