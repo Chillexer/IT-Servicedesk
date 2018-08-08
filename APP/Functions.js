@@ -30,6 +30,11 @@ module.exports ={
             callback(err, data);
           });
       },
+      SocketQuery: function(sql,callback){
+        this.SQLQuery(sql, function (err, data) {
+          callback(err, data);
+        });
+      },
       InsertOrder: function(body,Callback){
         var model = body.model;
         var storage = body.storage;
