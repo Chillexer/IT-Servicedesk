@@ -1,0 +1,59 @@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<!-- <script src="/lib/jquery-3.3.1/jquery-3.3.1.min.js"></script>
+<script src="/lib/popper.js/popper.min.js"></script>
+<script src="/lib/bootstrap-4.1.3/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+<link rel="stylesheet" href="/lib/bootstrap-4.1.3/css/bootstrap.min.css"> -->
+
+<div class="container">
+    <h2 class="form-new-heading">Opret Nyt Produkt</h2>
+        <form class="form-new" action="/createproduct" method="POST" id="newproductform">
+        
+            <div class="form-group">
+                <label for="Make"> Mærke: </label>
+                <input type="text" id="inputMake" class="form-control" name="Make" placeholder="Make">
+            </div>
+            <div class="form-group">
+                <label for="Model"> Model: </label>
+                <input type="text" id="inputModel" class="form-control" name="Model" placeholder="Model">
+            </div>
+            <div class="form-group">
+                <label for="Image"> Billede link: </label>
+                <input type="text" id="inputImage" class="form-control" name="Image" placeholder="Image">
+            </div>
+            <div class="form-group">
+                <label for="CPU"> Processor: </label>
+                <input type="text" id="inputCPU" class="form-control" name="CPU" placeholder="CPU">
+            </div>
+            <div class="form-group">
+                <label for="RAMID"> RAM: </label>
+                <select id="inputRAMID" name="RAMID" class="form-control"> <option value="Ingen">Ingen</option> <option value="8">8 GB</option> </select>
+            </div>
+            <div class="form-group">
+                <label for="HDD"> Harddisk: </label>
+                <select id="inputHDDID" name="HDDID" class="form-control"> <option value="Ingen">Ingen</option> <option value="320">320 GB</option> </select>
+            </div>
+            <div class="form-group">
+                <label for="OS"> OS: </label>
+                <select id="inputOS" name="OS" class="form-control"> <option value="Ingen">Ingen</option> <option value="Windows Vista">Windows Vista</option> </select>
+            </div>
+            <div class="form-group">
+                <label for="Description"> Beskrivelse: </label>
+                <input type="text" id="inputDescription" class="form-control" name="Description" placeholder="Description">
+            </div>
+            <div class="form-group">
+                <label for="Status"> Pris: </label>
+                <input type="text" id="inputPrice" class="form-control" name="Price" placeholder="Price">
+            </div>
+            <button id="btn-submit" class="btn btn-lg btn-primary btn-block" type="submit">Opret</button>
+            <button id="btn-back" class="btn btn-lg btn-danger btn-block" type="">Annuller</button>
+        </form>
+</div>
