@@ -30,6 +30,11 @@ router.get("/ordre*", function (req, res) {
     res.sendFile(path.resolve(__dirname + "/../views/ordre.html"));
 });
 
+router.get("/servicedesk", function (req, res) {
+    res.sendFile(path.resolve(__dirname + "/../views/servicedesk.html"));
+});
+
+
 // standard route
 router.get("/", function (req, res) {
     res.sendFile(path.resolve(__dirname + "/../views/shop.html"));

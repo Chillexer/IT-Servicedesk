@@ -33,5 +33,23 @@ module.exports = {
 
             });
         });
+        socket.on('DeletePC', function(ID){
+            var sqlstring = "UPDATE `PC` SET `ItemStatus` = 'skrottet' WHERE `PC`.`ID` = " + ID;
+            SQL.SocketQuery(sqlstring, function (err, data) {
+                if (err) throw err;
+                socket.emit("DeletePCResponse", data);
+            });
+        });
+        socket.on('DeleteMultiplePC', function(IDs){
+            var sqlstring = "UPDATE `PC` SET `ItemStatus` = 'skrottet' WHERE ";
+            IDs.forEach((element, id) => {
+                if(id == 0) sqlstring += "`PC`.`ID` = " + element
+                else sqlstring += " OR `PC`.`ID` = " + element;
+            });
+            SQL.SocketQuery(sqlstring, function (err, data) {
+                if (err) throw err;
+                socket.emit("DeleteMultiplePCResponse", data);
+            });
+        });
     }
 }
