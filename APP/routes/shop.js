@@ -12,7 +12,6 @@ router.post("/bestilling", function (req, res) {
             if (err) throw err; 
             res.redirect("/ordre/"+data[0].Mail + "/" + id);
         });
-        
     });
 });
 
