@@ -142,7 +142,7 @@ function changeTab(evt, tabname) {
     tab3();
 }
 
-var socket = io.connect('http://192.168.0.63');
+var socket = io.connect('localhost');
 
 
 socket.on("DeletePCResponse", function (data) {
@@ -249,8 +249,51 @@ function tab1() {
   socket.emit("SQLQuery", sql);
 }
 
+$('#template').on('change', function(){
+console.log($('#template').val());
+});
+
+// Fill product form
+//RAM
+socket.on("RAMOptionsResponse", function (RAMdata) {
+  Init(RAMdata);   
+});
+
+function Init(RAMdata){
+  RAMdata[0].forEach((element, id) => {
+        $('#inputRAMID').append('<option value="'+element.Size+'">'+element.Size+ ' GB RAM </option>');
+  });
+};
+// HHD
+socket.on("HDDOptionsResponse", function (HDDdata) {
+  InitHDD(HDDdata);   
+});
+
+function InitHDD(HDDdata){
+  HDDdata[0].forEach((item, id) => {
+        $('#inputHDDID').append('<option value="'+item.Size+'">'+item.Size+ ' GB </option>');
+  });
+};
+// OS
+socket.on("OSOptionsResponse", function (OSdata) {
+  console.log(OSdata);
+  InitOS(OSdata);   
+});
+
+function InitOS(OSdata){
+  OSdata[0].forEach((item, id) => {
+    console.log(item);
+    console.log(OSdata);
+        $('#inputOS').append('<option value="'+item.ID+'">'+item.OS+ ' </option>');
+  });
+};
+
 $(".create-pc").click(function () {
   //Hente data til form
+  socket.emit("RAMOptions");
+  socket.emit("HDDOptions");
+  socket.emit("OSOptions");
+
   $(".create-pc").css("display", "");
   $("#form-new-edit").css("display", "block");
   $("#tab-3").css("display", "none");

@@ -28,6 +28,21 @@ module.exports = {
         });
         socket.on('SQLQuery', function (sqlString) {
             SQL.SocketQuery(sqlString, function (err, data) {
+
+        socket.on('HDDOptions', function () {
+            SQL.GetHDDOptions(function (err, data) {
+                if (err) throw err;
+                socket.emit("HDDOptionsResponse", data);
+            });
+        });
+        socket.on('OSOptions', function () {
+            SQL.GetOSOptions(function (err, data) {
+                if (err) throw err;
+                socket.emit("OSOptionsResponse", data);
+            });
+        });
+        socket.on('SQLQuery', function (sqlString) {
+            SQL.SocketQuery(sqlString, function (err, data) {
                 if (err) throw err;
                 socket.emit("SQLQueryResponse", data);
 

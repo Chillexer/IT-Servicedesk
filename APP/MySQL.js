@@ -36,6 +36,16 @@ module.exports = {
       callback(err, data);
     });
   },
+  GetHDDOptions: function (callback) {
+    this.SQLQuery("CALL GetHDDOptions()", function (err, data) {
+      callback(err, data);
+    });
+  },
+  GetOSOptions: function (callback) {
+    this.SQLQuery("CALL GetOSOptions()", function (err, data) {
+      callback(err, data);
+    });
+  },
   SocketQuery: function (sql, callback) {
     this.SQLQuery(sql, function (err, data) {
       callback(err, data);
