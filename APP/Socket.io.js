@@ -26,30 +26,30 @@ module.exports = {
                 socket.emit("RAMOptionsResponse", data);
             });
         });
-        socket.on('SQLQuery', function (sqlstring) {
-            SQL.SocketQuery(sqlstring, function (err, data) {
+        socket.on('SQLQuery', function (sqlString) {
+            SQL.SocketQuery(sqlString, function (err, data) {
                 if (err) throw err;
                 socket.emit("SQLQueryResponse", data);
 
             });
         });
         socket.on('DeletePC', function(ID){
-            var sqlstring = "UPDATE `PC` SET `ItemStatus` = 'skrottet' WHERE `PC`.`ID` = " + ID;
-            SQL.SocketQuery(sqlstring, function (err, data) {
+            var sqlString = "UPDATE `PC` SET `ItemStatus` = 'skrottet' WHERE `PC`.`ID` = " + ID;
+            SQL.SocketQuery(sqlString, function (err, data) {
                 if (err) throw err;
                 socket.emit("DeletePCResponse", data);
             });
         });
         socket.on('DeleteMultiplePC', function(IDs){
-            var sqlstring = "UPDATE `PC` SET `ItemStatus` = 'skrottet' WHERE ";
+            var sqlString = "UPDATE `PC` SET `ItemStatus` = 'skrottet' WHERE ";
             IDs.forEach((element, id) => {
-                if(id == 0) sqlstring += "`PC`.`ID` = " + element
-                else sqlstring += " OR `PC`.`ID` = " + element;
+                if(id == 0) sqlString += "`PC`.`ID` = " + element;
+                else sqlString += " OR `PC`.`ID` = " + element;
             });
-            SQL.SocketQuery(sqlstring, function (err, data) {
+            SQL.SocketQuery(sqlString, function (err, data) {
                 if (err) throw err;
                 socket.emit("DeleteMultiplePCResponse", data);
             });
         });
     }
-}
+};

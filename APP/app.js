@@ -1,12 +1,13 @@
 var methodOverride = require("method-override"),
+    bodyParser = require("body-parser"),
+    express = require("express"),
+    app = express(),
+    server = require('http').Server(app),
+    SocketIO = require('./Socket.io'),
+    io = require('socket.io')(server);
   // LocalStrategy  = require("passport-local"),
-  bodyParser = require("body-parser"),
   // passport       = require("passport"),
-  express = require("express"),
-  app = express(),
-  server = require('http').Server(app),
-  SocketIO = require('./Socket.io'); 
-  io = require('socket.io')(server);
+  
 
 var shopRoutes = require(__dirname + "/routes/shop");
 

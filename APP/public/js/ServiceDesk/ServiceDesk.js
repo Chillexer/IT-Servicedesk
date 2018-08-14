@@ -261,7 +261,7 @@ $("#newproductform").on("submit", function (ev) {
   ev.preventDefault();
   var data = $("#newproductform").serializeArray();
   $(".tab").css("display", "");
-})
+});
 $(".close-form, #btn-back").click(function () {
   $(".tab").css("display", "");
   if (currenttab == "tab-1") tab1();
