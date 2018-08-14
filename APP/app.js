@@ -23,6 +23,6 @@ io.on('connection', socket => SocketIO.Sockets(socket));
 // Routes Configurations
 app.use(shopRoutes);
 
-server.listen(80, function () {
+server.listen(80,"127.0.0.1", function () {
   console.log("Server has started!!!");
 });

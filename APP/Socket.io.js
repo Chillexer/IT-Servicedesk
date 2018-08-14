@@ -26,6 +26,18 @@ module.exports = {
                 socket.emit("RAMOptionsResponse", data);
             });
         });
+        socket.on('HDDOptions', function () {
+            SQL.GetHDDOptions(function (err, data) {
+                if (err) throw err;
+                socket.emit("HDDOptionsResponse", data);
+            });
+        });
+        socket.on('OSOptions', function () {
+            SQL.GetOSOptions(function (err, data) {
+                if (err) throw err;
+                socket.emit("OSOptionsResponse", data);
+            });
+        });
         socket.on('SQLQuery', function (sqlstring) {
             SQL.SocketQuery(sqlstring, function (err, data) {
                 if (err) throw err;
