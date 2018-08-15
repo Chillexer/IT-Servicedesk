@@ -1,5 +1,6 @@
 var socket = io.connect('localhost');
 
+
 socket.on("SQLQueryResponse", function (data) { //Denne function står for oprettelse i tabellen
   $("#form-new-edit").css("display", "");
   removeevents();
@@ -100,6 +101,7 @@ socket.on("GetTemplatesResponse", function (TemplateData) { //Denne function st�
 });
 
 socket.on("OrderByIDResponse", function (data) { //Denne function står for at tilføje ordrer data til formen
+  $("#form-new-edit").find("#cid").val(data[0][0].CID);
   $("#form-new-edit").find("#id").val(data[0][0].WID);
   $("#form-new-edit").find("#name").val(data[0][0].FirstName + " " + data[0][0].LastName);
   $("#form-new-edit").find("#email").val(data[0][0].Mail);
@@ -108,6 +110,21 @@ socket.on("OrderByIDResponse", function (data) { //Denne function står for at t
   $("#form-new-edit").find("#model").val(data[0][0].PCModel);
   $("#form-new-edit").find("#cpu").val(data[0][0].CPU);
   $("#form-new-edit").find("#ram").val(data[0][0].RAM + "GB");
+  $("#form-new-edit").find(".form-control").each(function(){
+    if($(this).attr("id") == "status")
+    $(this).prop("disabled", true);
+    $(this).prop("readonly", true);
+  });
+  $("#form-new-edit form").attr("id","SaveOrder");
+  $("#SaveOrder").off();
+  $("#SaveOrder").on("submit", function (ev) {
+    ev.preventDefault();
+    if($("#form-new-edit").find("#ram").prop("readonly"))
+    return;
+    var data = $("#SaveOrder").serializeArray();
+    socket.emit("UpdateOrder" ,data);
+    console.log(data);
+});
   var sizes = data[0][0].DiskSizes.split(", ");
   var disktypes = data[0][0].DiskTypes.split(", ");
   var Diskstring = "";
@@ -122,4 +139,11 @@ socket.on("OrderByIDResponse", function (data) { //Denne function står for at t
 
 socket.on("ProductElementResponse", function (data) { //Denne function står for at tilføje pc data til formen
   console.log(data);
+});
+
+socket.on('UpdateOrderResponse', function(DATA){//Denne function står for at vise tab1 siden igen efter succesfuld opdatering af ordre
+  console.log(DATA);
+  $(".tab").css("display", "");
+    $("#form-new-edit").css("display", "");
+    tab1();
 });

@@ -3,6 +3,7 @@ body {
     margin: 0;
 }
 
+
 .sidenav {
     height: 100%;
     width: 300px;
@@ -168,6 +169,17 @@ body {
     border-bottom: none;
     color: black;
 }
+.main .edit-form{
+    user-select: none;
+    width: 25px;
+    font-size: 130%;
+    cursor: pointer;
+    position: absolute;
+    left: 360px;
+    top: 70px;
+    border-bottom: none;
+    color: black;
+}
 #form-new-edit{
     display:none;
 }
@@ -298,6 +310,9 @@ body {
     .main .close-form{
         left: 15px;
     }
+    .main .edit-form{
+        left: 60px;
+    }
 }
 .form-new-heading{
     font-size: 20px;
@@ -323,6 +338,9 @@ body {
     -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+input:read-only, select:disabled { 
+    background-color: rgb(221, 221, 221);
 }
 
 .btn-block {

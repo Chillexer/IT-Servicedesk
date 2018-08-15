@@ -21,6 +21,7 @@ var notify       = require( 'gulp-notify' );
 var plumber      = require( 'gulp-plumber' );
 var options      = require( 'gulp-options' );
 var gulpif       = require( 'gulp-if' );
+var concat = require('gulp-concat');
 
 // Browers related plugins
 var browserSync  = require( 'browser-sync' ).create();
@@ -33,11 +34,11 @@ var styleSRC     = './public/css/ServiceDesk/mystyle.scss';
 var styleURL     = './public/css/ServiceDesk/compiled/';
 var mapURL       = './';
 
-var jsSRC        = './public/js/ServiceDesk/ServiceDesk.js';
+var jsSRC        = './public/js/ServiceDesk/all.js';
 var jsURL        = './public/js/ServiceDesk/';
 
 var styleWatch   = './public/css/ServiceDesk/**/*.scss';
-var jsWatch      = './public/js/ServiceDesk/*.js';
+var jsWatch      = './public/js/ServiceDesk/modules/*.js';
 
 // Tasks
 gulp.task( 'browser-sync', function() {
@@ -68,7 +69,7 @@ gulp.task( 'js', function() {
 	})
 	.transform( babelify, { presets: [ 'env' ] } )
 	.bundle()
-	.pipe( source( 'myscript.js' ) )
+	.pipe( source( 'ServiceDesk.js' ) )
 	.pipe( buffer() )
 	.pipe( gulpif( options.has( 'production' ), stripDebug() ) )
 	.pipe( sourcemaps.init({ loadMaps: true }) )
@@ -91,7 +92,20 @@ function triggerPlumber( src, url ) {
 
  gulp.task( 'watch', ['default', 'browser-sync'], function() {
 	gulp.watch( styleWatch, [ 'styles' ] );
-	gulp.watch( jsWatch, [ 'js', reload ] );
+	gulp.watch( jsWatch, [ 'scripts', reload ] );
 	gulp.src( jsURL + 'myscript.min.js' )
 		.pipe( notify({ message: 'Gulp is Watching, Happy Coding!' }) );
  });
+
+  
+gulp.task('scripts', function() {
+    var path = "./public/js/ServiceDesk/modules/"
+    gulp.src([path +'Sockets.js', path +'Variables.js',path + 'EventListeners.js', path +'ServiceDesk.js'])
+      .pipe(concat('all.js'))
+      .pipe(gulp.dest('./public/js/ServiceDesk/')).on("end",function(){
+          console.log("finished scripts");
+          gulp.start("js").on("end",function(){
+              console.log("finished js");
+            });
+        });
+  });
