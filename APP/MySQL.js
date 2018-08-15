@@ -46,6 +46,11 @@ module.exports = {
       callback(err, data);
     });
   },
+  GetTemplates: function (callback) {
+    this.SQLQuery("CALL GetTemplates()", function (err, data) {
+      callback(err, data);
+    });
+  },
   SocketQuery: function (sql, callback) {
     this.SQLQuery(sql, function (err, data) {
       callback(err, data);

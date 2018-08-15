@@ -6,11 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Ticketsystem</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="/lib/socket.io/socket.io.js"></script>
+    <script src="/js/ServiceDesk/Sockets.js"></script>
+    <script src="/js/ServiceDesk/Variables.js"></script>
+    <link href="/lib/googleFonts/MaterialIcons.css" rel="stylesheet">
     <script src="/lib/jquery-3.3.1/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <link rel="stylesheet" href="/css/ServiceDesk/ServiceDesk.css">
-    
 </head>
 
 <body>
@@ -121,7 +122,7 @@
                 <i class="material-icons close-form">
                         backspace
                         </i>
-            <h2 class="form-new-heading">Opret Nyt Produkt</h2>
+            
                 <!-- <form class="form-new" method="POST" id="newproductform">
                 
                     <div class="form-group">
@@ -164,7 +165,7 @@
                     <button id="btn-back" class="btn btn-lg btn-danger btn-block" type="">Annuller</button>
                 </form> -->
 
-                <form class="form-new" action="/createpc" method="POST" id="newpcform">
+                <form class="form-new" action="/createpc" method="POST" id="altform">
         
                     <div class="form-group">
                         <label for="Status"> Template: </label>
@@ -208,7 +209,7 @@
         </div>
     </div>
     
-
+    <script src="/js/ServiceDesk/EventListeners.js"></script>
     <script src="/js/ServiceDesk/ServiceDesk.js"></script>
 </body>
 

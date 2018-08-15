@@ -2,6 +2,9 @@ body {
     font-family: "Lato", sans-serif;
     margin: 0;
 }
+input:read-only { 
+    background-color: rgb(221, 221, 221);
+}
 
 .sidenav {
     height: 100%;

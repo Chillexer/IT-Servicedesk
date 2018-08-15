@@ -1,117 +1,9 @@
-var stararr = [];
-var checkboxarr = [];
-var tab = 1;
-var created = false;
-var currenttab = "tab-1";
 
-function removeevents() {
-  $(function () {
-    $('tr').off();
-    $('.main tr input[type="checkbox"]').off();
-    $('.main table tr .delete').off();
-    $(".star").off();
-  });
-}
-
-function addevents() {
-  $(function () {
-    $('tr').off();
-    $('.main tr input[type="checkbox"]').off();
-    $('.main table tr .delete').off();
-    $(".star").off();
-    $('.main table tr .delete').click(function () {
-      if (currenttab == "tab-2" || currenttab == "tab-3") {
-        var id = $(this).closest("tr").attr("id");
-        socket.emit("DeletePC", id);
-      }
-    });
-    $('tr td:nth-of-type(3), tr td:nth-of-type(4)').click(function () {
-       var ID = $(this).closest("tr").attr("id");
-       $("#form-new-edit").css("display", "block");
-       $("#"+ currenttab).css("display", "none");
-      $(".tab").css("display", "none");
-      $("#form-new-edit").find("#inputMake").val(ID);
-    });
-    $('tr').hover(function () {
-      if (!$(this).find('input[type="checkbox"]').is(":checked"))
-        $(this).find(".checkmark").css("background", '#ccc');
-      else
-        $(this).find(".checkmark").css("background", '#bbb');
-      $(this).find(".star").css('color', '#ccc');
-      stararr.forEach((element, ID) => {
-        if (element.id == $(this).attr("id") && element.checked)
-          $(this).find(".star").css('color', 'yellow');
-      });
-      $(this).find(".delete").css("color", '#ccc');
-    }, function () {
-      $(this).find(".delete").css("color", '');
-      $(this).find(".checkmark").css("background", '');
-      $(this).find(".star").css('color', '');
-      stararr.forEach((element, ID) => {
-        if (element.id == $(this).attr("id") && element.checked)
-          $(this).find(".star").css('color', 'yellow');
-      });
-    });
-    $('.main table tr .delete').hover(function () {
-      $(this).css("color", 'rgb(255, 60, 60)');
-    }, function () {
-      $(this).css("color", '#ccc');
-    });
-    $(".star").on("click", function () {
-      var id = -1;
-      stararr.forEach((element, ID) => {
-        if (element.id == $(this).closest("tr").attr("id"))
-          id = ID;
-      });
-      if (id == -1) {
-        id = stararr.length;
-        stararr.push({
-          id: $(this).closest("tr").attr("id"),
-          checked: $(this).prop("checked")
-        });
-      }
-      if (stararr[id].checked) $(this).css("color", "");
-      else $(this).css("color", "yellow");
-      stararr[id].checked = !stararr[id].checked;
-    });
-    if (!created) {
-      //created = !created;
-      $('.main tr input[type="checkbox"]').click(function test() {
-        var checked;
-        checked = $(this).prop("checked");
-        var id = -1;
-        checkboxarr.forEach((element, ID) => {
-          if (element.id == $(this).closest("tr").attr("id"))
-            id = ID;
-        });
-        if (id == -1) {
-          id = checkboxarr.length;
-          checkboxarr.push({
-            id: $(this).closest("tr").attr("id"),
-            checked: false
-          });
-        }
-        checkboxarr[id].checked = !checkboxarr[id].checked;
-        var count = 0;
-        checkboxarr.forEach((element, ID) => {
-          if (element.checked)
-            count++;
-        });
-        if (count > 0)
-          $(".delete-selected").css("display", "block");
-
-        else
-          $(".delete-selected").css("display", "");
-      });
-    }
-  });
-}
 
 function changeTab(evt, tabname) {
   // Declare all variables
   var i, tabcontent, tablinks;
   currenttab = tabname;
-  console.log(currenttab);
   // Get all elements with class="tabcontent" and hide them
   tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
@@ -142,98 +34,6 @@ function changeTab(evt, tabname) {
     tab3();
 }
 
-var socket = io.connect('localhost');
-
-
-socket.on("DeletePCResponse", function (data) {
-  if (currenttab == "tab-1") tab1();
-  else if (currenttab == "tab-2") tab2();
-  else if (currenttab == "tab-3") tab3();
-});
-
-socket.on("DeleteMultiplePCResponse", function (data) {
-  if (currenttab == "tab-1") tab1();
-  else if (currenttab == "tab-2") tab2();
-  else if (currenttab == "tab-3") tab3();
-});
-
-
-
-
-socket.on("SQLQueryResponse", function (data) {
-  $("#form-new-edit").css("display", "");
-  removeevents();
-  if ($("#tab-btn-3").hasClass("active")) {
-    $(".create-pc").css("display", "block");
-    $('.main #searchdiv input[type="text"]').attr("placeholder", "Søg i Computere");
-    $("#tab-3").css("display", "");
-    console.log(data);
-    $("#tab-3").find("tr").remove();
-    data.forEach(element => {
-      $("#tab-3").append('<tr id="' + element.ID + '"><td>' +
-        '<label class = "containers">' +
-        ' <input type = "checkbox" >' +
-        ' <span class = "checkmark" > </span>' +
-        ' </label> ' +
-        ' </td> ' +
-        ' <td >' +
-        ' <a class = "material-icons star" > stars </a> ' +
-        ' </td> ' +
-        ' <td >' + element.PCMake + ' ' + element.PCModel + '</td> ' +
-        ' <td >' + element.Serial + '</td> ' +
-        ' <td >' +
-        ' <i class = "material-icons delete" >delete</i> ' +
-        '</td></tr >');
-    });
-    addevents();
-  } else if ($("#tab-btn-2").hasClass("active")) {
-    $("#tab-2").css("display", "");
-    $(".create-pc").css("display", "");
-    $('.main #searchdiv input[type="text"]').attr("placeholder", "Søg i Klargjorte Computere");
-    $("#tab-2").find("tr").remove();
-    data.forEach(element => {
-      $("#tab-2").append('<tr id="' + element.ID + '"><td>' +
-        '<label class = "containers">' +
-        ' <input type = "checkbox" >' +
-        ' <span class = "checkmark" > </span>' +
-        ' </label> ' +
-        ' </td> ' +
-        ' <td >' +
-        ' <a class = "material-icons star" > stars </a> ' +
-        ' </td> ' +
-        ' <td >' + element.PCMake + ' ' + element.PCModel + '</td> ' +
-        ' <td >' + element.Serial + '</td> ' +
-        ' <td >' +
-        ' <i class = "material-icons delete" >delete</i> ' +
-        '</td></tr >');
-    });
-    addevents();
-  } else if ($("#tab-btn-1").hasClass("active")) {
-    $("#tab-1").css("display", "");
-    $('.main #searchdiv input[type="text"]').attr("placeholder", "Søg i Ordrer");
-    $(".create-pc").css("display", "");
-    $("#tab-1").find("tr").remove();
-    data[0].forEach(element => {
-      $("#tab-1").append('<tr id="' + element.WID + '"><td>' +
-        '<label class = "containers">' +
-        ' <input type = "checkbox" >' +
-        ' <span class = "checkmark" > </span>' +
-        ' </label> ' +
-        ' </td> ' +
-        ' <td >' +
-        ' <a class = "material-icons star" > stars </a> ' +
-        ' </td> ' +
-        ' <td >' + element.FirstName + ' ' + element.LastName + '</td> ' +
-        ' <td >' + element.Mail + '</td> ' +
-        ' <td >' +
-        ' <i class = "material-icons delete" >delete</i> ' +
-        '</td></tr >');
-    });
-    addevents();
-  }
-});
-
-
 function tab3() {
   var sql = "SELECT * FROM `PC` where ItemStatus != 'klar til salg' AND ItemStatus != 'skrottet'";
   socket.emit("SQLQuery", sql);
@@ -248,78 +48,66 @@ function tab1() {
   var sql = "CALL GetOrders()";
   socket.emit("SQLQuery", sql);
 }
+tab1();
 
-$('#template').on('change', function(){
-console.log($('#template').val());
-});
-
-// Fill product form
+// Fill new PC form
 //RAM
-socket.on("RAMOptionsResponse", function (RAMdata) {
-  Init(RAMdata);   
-});
-
 function Init(RAMdata){
   RAMdata[0].forEach((element, id) => {
-        $('#inputRAMID').append('<option value="'+element.Size+'">'+element.Size+ ' GB RAM </option>');
+        $('#ram').append('<option value="'+element.Size+'">'+element.Size+ ' GB RAM </option>');
   });
 };
-// HHD
-socket.on("HDDOptionsResponse", function (HDDdata) {
-  InitHDD(HDDdata);   
-});
 
+// HHD
 function InitHDD(HDDdata){
   HDDdata[0].forEach((item, id) => {
-        $('#inputHDDID').append('<option value="'+item.Size+'">'+item.Size+ ' GB </option>');
-  });
-};
-// OS
-socket.on("OSOptionsResponse", function (OSdata) {
-  console.log(OSdata);
-  InitOS(OSdata);   
-});
-
-function InitOS(OSdata){
-  OSdata[0].forEach((item, id) => {
-    console.log(item);
-    console.log(OSdata);
-        $('#inputOS').append('<option value="'+item.ID+'">'+item.OS+ ' </option>');
+        $('#hdd').append('<option value="'+item.Size+'">'+item.Size+ ' GB </option>');
   });
 };
 
-$(".create-pc").click(function () {
-  //Hente data til form
-  socket.emit("RAMOptions");
-  socket.emit("HDDOptions");
-  socket.emit("OSOptions");
-
-  $(".create-pc").css("display", "");
-  $("#form-new-edit").css("display", "block");
-  $("#tab-3").css("display", "none");
-  $(".tab").css("display", "none");
-});
-//Form ved submit
-$("#newproductform").on("submit", function (ev) {
-  ev.preventDefault();
-  var data = $("#newproductform").serializeArray();
-  $(".tab").css("display", "");
-});
-$(".close-form, #btn-back").click(function () {
-  $(".tab").css("display", "");
-  if (currenttab == "tab-1") tab1();
-  else if (currenttab == "tab-2") tab2();
-  else if (currenttab == "tab-3") tab3();
-});
-
-$(".delete-selected").click(function () {
-  var IDs = [];
-  checkboxarr.forEach(element => {
-    if (element.checked) IDs.push(element.id);
+//Templates
+function InitTemplates(TemplateData){
+  $('#template').append('<option value="0"> --- </option>');
+  TemplateData[0].forEach((item, id) => {
+      console.log(TemplateData);
+      console.log(item);
+      $('#template').append('<option value="'+item.ID+'">'+item.Name+ ' </option>');
   });
-  console.log(IDs);
-  socket.emit("DeleteMultiplePC", IDs);
+
+  $('#template').on('change', function () {
+    console.log($('#template').val());
+  
+    if ($('#template').val() != 0) {
+      $('#make').val(TemplateData[0][0].PCMake);
+      $('#model').val(TemplateData[0][0].PCModel);
+      $('#cpu').val(TemplateData[0][0].CPU);
+      $('#description').val(TemplateData[0][0].Description);
+
+      $('#make').prop('readonly', 'readonly');
+      $('#model').prop('readonly', 'readonly');
+      $('#cpu').prop('readonly', 'readonly');
+      $('#description').prop('readonly', 'readonly');
+
+    }
+  
+  });
+
+};
+
+function CreateForm(Form){
+$('#template').off();
+$("#altform").html("");
+Forms[Form].forEach(element => {
+  $("#altform").append(element);
 });
 
+}
 
-tab1();
+function DataInserter(Form, ID){
+  CreateForm(Form);
+  var SQL = {
+    ShowOrder: ["OrderByID" ,"CALL GetOrderByID(" + ID + ")"],
+    ShowPC: ["ProductElement" ,ID]
+  }
+  socket.emit(SQL[Form][0] ,SQL[Form][1]);
+}

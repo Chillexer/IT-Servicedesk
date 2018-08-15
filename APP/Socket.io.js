@@ -13,6 +13,12 @@ module.exports = {
                 socket.emit("ProductElementResponse", data);
             });
         });
+        socket.on('OrderByID', function (sqlString) {
+            SQL.SocketQuery(sqlString, function (err, data) {
+                if (err) throw err;
+                socket.emit("OrderByIDResponse", data);
+            });
+        });
         socket.on('OrderElement', function (Criteria) {
             SQL.GetOrder(Criteria, function (err, data) {
                 if (err) throw err;
@@ -26,13 +32,16 @@ module.exports = {
                 socket.emit("RAMOptionsResponse", data);
             });
         });
-        socket.on('SQLQuery', function (sqlString) {
-            SQL.SocketQuery(sqlString, function (err, data) {
-
         socket.on('HDDOptions', function () {
             SQL.GetHDDOptions(function (err, data) {
                 if (err) throw err;
                 socket.emit("HDDOptionsResponse", data);
+            });
+        });
+        socket.on('GetTemplates', function () {
+            SQL.GetTemplates(function (err, data) {
+                if (err) throw err;
+                socket.emit("GetTemplatesResponse", data);
             });
         });
         socket.on('OSOptions', function () {
@@ -66,5 +75,7 @@ module.exports = {
                 socket.emit("DeleteMultiplePCResponse", data);
             });
         });
+
+
     }
 };
