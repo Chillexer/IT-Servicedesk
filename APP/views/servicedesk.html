@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ticketsystem</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/lib/socket.io/socket.io.js"></script>
+    <link href="/lib/googleFonts/MaterialIcons.css" rel="stylesheet">
+    <script src="/lib/jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="/css/ServiceDesk/compiled/mystyle.css">
+</head>
+
+<body>
+    <div class="sidenav">
+        <a id="filter_header" href="#">Filter</a>
+        <a href="#services">Services</a>
+        <a href="#clients">Clients</a>
+        <a href="#contact">Contact</a>
+    </div>
+    <div class="main">
+            <i class="material-icons delete-selected">
+                    delete
+                    </i>
+            <i class="material-icons create-pc">
+                        add_to_queue
+                        </i>
+        <form id="searchdiv">
+            <input type="submit" name="search" id="search" value="Søg">
+            <input type="text" name="search_text" id="search_text" placeholder="Søg i ordrer">
+        </form>
+        <div class="tab">
+            <button id="tab-btn-1" class="tablinks active">
+                <span class="material-icons" style="float: left;">assignment</span>Ordrer</button>
+            <button id="tab-btn-2" class="tablinks">
+                <span class="material-icons" style="float: left;">computer</span>Klargjorte Computere</button>
+            <button id="tab-btn-3" class="tablinks">
+                <span class="material-icons" style="float: left;">devices</span>Computere</button>
+        </div>
+        <table  id="tab-1" class="tabcontent">
+                <col width="30">
+                <col width="30">
+                <col width="400">
+                <col width="400">
+                <col width="30">
+
+        </table>
+        <table id="tab-2" class="tabcontent" style="display: none;">
+                <col width="30">
+                <col width="30">
+                <col width="400">
+                <col width="400">
+                <col width="30">
+
+        </table>
+        <table id="tab-3" class="tabcontent" style="display: none;">
+                <col width="30">
+                <col width="30">
+                <col width="400">
+                <col width="400">
+                <col width="30">
+            <tr id="1">
+                <td>
+                        <label class="containers">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                              </label>
+                </td>
+                <td>
+                    <a class="material-icons star">stars</a>
+                </td>
+                <td>Julie Nielsen</td>
+                <td>Lenovo Ideapad 320</td>
+                <td>
+                        <i class="material-icons delete">
+                                delete
+                                </i>
+                </td>
+            </tr >
+            <tr id="2">
+                <td>
+                        <label class="containers">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                              </label>
+                </td>
+                <td>
+                    <a class="material-icons star">stars</a>
+                </td>
+                <td>Frederik Nielsen</td>
+                <td>Lenovo Ideapad 320</td>
+                <td>
+                        <i class="material-icons delete">
+                                delete
+                                </i>
+                </td>
+            </tr >
+            <tr id="3">
+                <td>
+                        <label class="containers">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                              </label>
+                </td>
+                <td>
+                    <a class="material-icons star">stars</a>
+                </td>
+                <td>Glenn Nielsen</td>
+                <td>Lenovo Ideapad 320</td>
+                <td>
+                        <i class="material-icons delete">
+                                delete
+                                </i>
+                </td>
+            </tr>
+
+        </table>
+        <div id="form-new-edit" class="container">
+                <i class="material-icons close-form">
+                        backspace
+                        </i>
+                        <i class="material-icons edit-form">
+                            edit
+                            </i>
+            
+                <!-- <form class="form-new" method="POST" id="newproductform">
+                
+                    <div class="form-group">
+                        <label for="Make"> Mærke: </label>
+                        <input type="text" id="inputMake" class="form-control" name="Make" placeholder="Mærke">
+                    </div>
+                    <div class="form-group">
+                        <label for="Model"> Model: </label>
+                        <input type="text" id="inputModel" class="form-control" name="Model" placeholder="Model">
+                    </div>
+                    <div class="form-group">
+                        <label for="Image"> Billede link: </label>
+                        <input type="text" id="inputImage" class="form-control" name="Image" placeholder="Image">
+                    </div>
+                    <div class="form-group">
+                        <label for="CPU"> Processor: </label>
+                        <input type="text" id="inputCPU" class="form-control" name="CPU" placeholder="CPU">
+                    </div>
+                    <div class="form-group">
+                        <label for="RAMID"> RAM: </label>
+                        <select id="inputRAMID" name="RAMID" class="form-control"> <option value="Ingen">Ingen</option> </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="HDD"> Harddisk: </label>
+                        <select id="inputHDDID" name="HDDID" class="form-control"> <option value="Ingen">Ingen</option> <option value="320">320 GB</option> </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="OS"> OS: </label>
+                        <select id="inputOS" name="OS" class="form-control"> <option value="Ingen">Ingen</option> <option value="Windows Vista">Windows Vista</option> </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Description"> Beskrivelse: </label>
+                        <input type="text" id="inputDescription" class="form-control" name="Description" placeholder="Description">
+                    </div>
+                    <div class="form-group">
+                        <label for="Status"> Pris: </label>
+                        <input type="text" id="inputPrice" class="form-control" name="Price" placeholder="Price">
+                    </div>
+                    <button id="btn-submit" class="btn btn-lg btn-primary btn-block" type="submit">Opret</button>
+                    <button id="btn-back" class="btn btn-lg btn-danger btn-block" type="">Annuller</button>
+                </form> -->
+
+                <form class="form-new" method="POST" id="altform">
+        
+                    <div class="form-group">
+                        <label for="Status"> Template: </label>
+                        <select id="template" name="template" class="form-control" required> <option value="Ukendt">Ukendt</option> <option value="Ukendt2">Ukendt2</option> </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Make"> Mærke: </label>
+                        <input type="text" id="inputMake" class="form-control" name="Make" placeholder="Make">
+                    </div>
+                    <div class="form-group">
+                        <label for="Model"> Model: </label>
+                        <input type="text" id="inputModel" class="form-control" name="Model" placeholder="Model">
+                    </div>
+                    <div class="form-group">
+                        <label for="Serial"> Serienummer: </label>
+                        <input type="text" id="inputSerial" class="form-control" name="Serial" placeholder="Serial">
+                    </div>
+                    <div class="form-group">
+                        <label for="CPU"> Processor: </label>
+                        <input type="text" id="inputCPU" class="form-control" name="CPU" placeholder="CPU">
+                    </div>
+                    <div class="form-group">
+                        <label for="RAM"> RAM: </label>
+                        <input type="text" id="inputRAM" class="form-control" name="RAM" placeholder="RAM">
+                    </div>
+                    <div class="form-group">
+                        <label for="HDD"> Harddisk: </label>
+                        <input type="text" id="inputHDD" class="form-control" name="HDD" placeholder="HDD">
+                    </div>
+                    <div class="form-group">
+                        <label for="Description"> Beskrivelse: </label>
+                        <input type="text" id="inputDescription" class="form-control" name="Description" placeholder="Description">
+                    </div>
+                    <div class="form-group">
+                        <label for="Status"> Status: </label>
+                        <select id="inputStatus" name="Status" class="form-control" required> <option value="Ukendt">Ukendt</option> <option value="Klar til salg">Klar til salg</option> <option value="Venter på reservedele">Venter på reservedele</option> <option value="Skal skrottes">Skal skrottes</option> </select>
+                    </div>
+                    <button id="btn-submit" class="btn btn-lg btn-primary btn-block" type="submit">Opret</button>
+                    <button id="btn-back" type="button" class="btn-back btn btn-lg btn-danger btn-block">Annuller</button>
+                </form>
+        </div>
+    </div>
+    
+    <script src="/js/ServiceDesk/ServiceDesk.js"></script>
+</body>
+
+</html>
