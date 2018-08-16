@@ -99,14 +99,47 @@ socket.on("GetTemplatesResponse", function (TemplateData) { //Denne function st�
   InitTemplates(TemplateData);
 });
 
-socket.on("GetTemplateRamDiskResponse", function (TemplateRamDisk) { //Denne function står for at hente template information til formen
-  InitTemplatesRamDisk(TemplateRamDisk);
-});
  socket.on("InsertTemplateResponse", function (SaveTemplate) { //Denne function gemmer nye templates 
   InitSaveTemplate(SaveTemplate);
 });
 
+ socket.on("InsertPCResponse", function (InsertPC) { //Denne function gemmer nye PC'er
+  InitInsertPC(InsertPC);
+});
 
+
+socket.on("PCElementResponse", function (data){ 
+  console.log(data);
+  var StatusArray = [
+    {
+      value: "klar til salg"
+    },
+    {
+      value: "skrottet"
+    },
+    {
+      value: "ny"
+    }
+  ];
+  $("#form-new-edit").find("#cid").val(data[0][0].CID);
+  $("#form-new-edit").find("#id").val(data[0][0].WID);
+  $("#form-new-edit").find("#make").val(data[0][0].PCMake);
+  $("#form-new-edit").find("#model").val(data[0][0].PCModel);
+  $("#form-new-edit").find("#serial").val(data[0][0].Serial);   
+  $("#form-new-edit").find("#cpu").val(data[0][0].CPU);
+  $("#form-new-edit").find("#ram").val(data[0][0].RAM + "GB");
+  $("#form-new-edit").find("#hdd").val(data[0][0].hdd);
+  $("#form-new-edit").find("#description").val(data[0][0].Description);
+  StatusArray.forEach(element => {
+    $("#form-new-edit").find("#status").append('<option value="' + element.value + '">' + element.value + '</option>');
+  });
+  $("#form-new-edit").find("#status").val(data[0][0].ItemStatus.toLowerCase());
+  $("#form-new-edit").find(".form-control").each(function(){
+    if($(this).attr("id") == "status")
+    $(this).prop("disabled", true);
+    $(this).prop("readonly", true);
+});
+});
 
 
 socket.on("OrderByIDResponse", function (data) { //Denne function står for at tilføje ordrer data til formen
@@ -144,10 +177,6 @@ socket.on("OrderByIDResponse", function (data) { //Denne function står for at t
   $("#form-new-edit").find("#hdd").val(Diskstring);
   $("#form-new-edit").find("#price").val(data[0][0].Price);
   $("#form-new-edit").find("#status").append('<option value="' + data[0][0].Status + '">' + data[0][0].Status + '</option>');
-});
-
-socket.on("ProductElementResponse", function (data) { //Denne function står for at tilføje pc data til formen
-  console.log(data);
 });
 
 socket.on('UpdateOrderResponse', function(DATA){//Denne function står for at vise tab1 siden igen efter succesfuld opdatering af ordre

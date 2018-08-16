@@ -7,7 +7,6 @@ var methodOverride = require("method-override"),
     io = require('socket.io')(server);
   // LocalStrategy  = require("passport-local"),
   // passport       = require("passport"),
-  
 
 var shopRoutes = require(__dirname + "/routes/shop");
 

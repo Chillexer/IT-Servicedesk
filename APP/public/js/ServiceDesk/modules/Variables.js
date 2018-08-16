@@ -21,7 +21,7 @@ function InputGen(name, type){
     '<label for="'+name+'">'+name+':</label>' +
     '<input type="'+type+'" id="'+name+'" ' +
     'class="form-control" name="'+name+'" ' +
-    'placeholder="'+name+'"></div>';
+    'placeholder="'+name+'"></div>'; 
   }
 //Bruges til at oprette de forskellige forms
 var Forms = {
@@ -67,7 +67,6 @@ var Forms = {
     ],
     ShowPC: [
       '<h2 class="form-new-heading">PC</h2>',
-      InputGen("template", "select"),
       InputGen("make", "text"),
       InputGen("model", "text"),
       InputGen("serial", "text"),
@@ -79,8 +78,8 @@ var Forms = {
       '<button id="btn-submit" ' +
       'class="btn btn-lg btn-primary btn-block" ' + 
       'type="submit">Gem</button>',
-      '<a id="btn-back" ' +
+      '<button id="btn-back" ' +
       'class="btn-back btn btn-lg btn-danger btn-block" ' +
-      'type="button">Annuller</a>'
+      'type="button">Annuller</button>'
     ]
 };

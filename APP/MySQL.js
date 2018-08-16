@@ -20,6 +20,11 @@ module.exports = {
       callback(err, data);
     });
   },
+    InsertPC: function (PCinput, callback) {
+    this.SQLQuery("CALL InsertPC('"+PCinput.make+"', '"+PCinput.model+"', '"+PCinput.serial+"', '"+PCinput.cpu+"', '"+PCinput.ram+"', '"+PCinput.hdd+"','"+PCinput.desc+"', '"+PCinput.status+"')", function (err, data) {
+      callback(err, data);
+    });
+  },
   GetOrder: function (Criteria, callback) {
     this.SQLQuery("CALL GetOrder(" + Criteria.id + ",'" + Criteria.email + "')", function (err, data) {
       callback(err, data);
@@ -35,7 +40,11 @@ module.exports = {
       callback(err, data);
     });
   },
-
+  GetPC: function (ID, callback) {
+    this.SQLQuery("CALL GetPC(" + ID + ")", function (err, data) {
+      callback(err, data);
+    });
+  },
   GetRAMOptions: function (callback) {
     this.SQLQuery("CALL GetRAMOptions()", function (err, data) {
       callback(err, data);
@@ -72,8 +81,9 @@ module.exports = {
     var address = body.address;
     var mail = body.mail;
     var phone = body.phone;
+    var status = "Ny";
 
-    this.SQLQuery("CALL InsertOrder( '" + firstname + "', '" + lastname + "', '" + address + "', '" + phone + "', '" + mail + "', " + showroomID + ", " + RAM + ", '" + storage + "', '" + OS + "')", function (err, data) {
+    this.SQLQuery("CALL InsertOrder( '" + firstname + "', '" + lastname + "', '" + address + "', '" + phone + "', '" + mail + "', " + showroomID + ", " + RAM + ", '" + storage + "', '" + OS + "', '" + status + "')", function (err, data) {
       Callback(err, data);
     });
   }

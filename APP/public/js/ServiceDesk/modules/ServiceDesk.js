@@ -93,21 +93,6 @@ function InitHDD(HDDdata){
 }
 
 
-
-
-
-
-
-//Template GetTemplateRamDisk
-function InitTemplatesRamDisk(TemplateRamDisk){
-  $('#template').append('<option value="0"> --- </option>');
-  TemplateRamDisk[0].forEach((item, id) => {
-    // console.log(TemplateRamDisk);
-    // console.log(item);
-    // $('#template').append('<option value="'+item.ID+'">'+item.Name+ ' </option>');
-  });
-};
-
 //Templates
 function InitTemplates(TemplateData){
   $('#template').append('<option value="0"> --- </option>');
@@ -129,7 +114,7 @@ function InitTemplates(TemplateData){
     console.log(TemplateData);
   
     if ($('#template').val() != 0 && $('#template').val() != 'ny') {
-      var ID = 0
+      var ID = 0;
       TemplateData[0].forEach((element, id) => {
         if(element.ID == $(_this).val())
         ID = id;
@@ -182,20 +167,26 @@ function InitTemplates(TemplateData){
       $('#hdd').attr('disabled', false);
     }
   });
-};
+}
 
 function InitSaveTemplate(RAMdata){
   // Lav popup
-};
+}
 
 //Står for at Oprette formen
 function CreateForm(Form){
 $('#template').off();
 $(".close-form, .btn-back").off();
-$("#altform").html("");
+$("#altform, #SaveOrder").html("");
+$("#altform, #SaveOrder").attr("id", "altform");
 Forms[Form].forEach(element => {
   $("#altform").append(element);
 });
+if(Form == "CreatePC")
+$(".edit-form").css("display", "none");
+else
+$(".edit-form").css("display", "");
+
 $(".close-form, .btn-back").click(function () {
   $(".tab").css("display", "");
   if (currenttab == "tab-1") tab1();
@@ -209,7 +200,7 @@ function DataInserter(Form, ID){
   CreateForm(Form);
   var SQL = {
     ShowOrder: ["OrderByID" ,"CALL GetOrderByID(" + ID + ")"],
-    ShowPC: ["ProductElement" ,ID]
+    ShowPC: ["PCElement" ,ID]
   };
   socket.emit(SQL[Form][0] ,SQL[Form][1]);
 }

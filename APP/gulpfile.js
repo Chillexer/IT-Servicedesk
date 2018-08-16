@@ -100,7 +100,7 @@ function triggerPlumber( src, url ) {
   
 gulp.task('scripts', function() {
     var path = "./public/js/ServiceDesk/modules/"
-    gulp.src([path +'Sockets.js', path +'Variables.js',path + 'EventListeners.js', path +'ServiceDesk.js'])
+    gulp.src([path +'Variables.js', path +'Sockets.js',path + 'EventListeners.js', path +'ServiceDesk.js'])
       .pipe(concat('all.js'))
       .pipe(gulp.dest('./public/js/ServiceDesk/')).on("end",function(){
           console.log("finished scripts");

@@ -1,3 +1,88 @@
+var stararr = [];
+var checkboxarr = [];
+var tab = 1;
+var created = false;
+var currenttab = "tab-1";
+//Creates html strings for Forms Array
+function InputGen(name, type){
+    if(type.toLowerCase() == "select")
+    return '<div class="form-group">' +
+    '<label for="'+name+'">'+name+':</label>' +
+    '<select id="'+name+'" name="'+name+'"' + 
+    'class="form-control" required></select>'+
+    '</div>';
+    else if(type.toLowerCase() == "hidden")
+    return '<div class="form-group">' +
+    '<input type="'+type+'" id="'+name+'" ' +
+    'class="form-control" name="'+name+'" ' +
+    'placeholder="'+name+'"></div>';
+    else  
+    return '<div class="form-group">' +
+    '<label for="'+name+'">'+name+':</label>' +
+    '<input type="'+type+'" id="'+name+'" ' +
+    'class="form-control" name="'+name+'" ' +
+    'placeholder="'+name+'"></div>'; 
+  }
+//Bruges til at oprette de forskellige forms
+var Forms = {
+    CreatePC: [
+      '<h2 class="form-new-heading">Opret Ny PC</h2>',
+      InputGen("template", "select"),
+      InputGen("name", "text"),
+      InputGen("make", "text"),
+      InputGen("model", "text"),
+      InputGen("serial", "text"),
+      InputGen("cpu", "text"),
+      InputGen("ram", "select"),
+      InputGen("hdd", "select"),
+      InputGen("description", "text"),
+      InputGen("status", "select"),
+      '<button id="btn-submit" ' +
+      'class="btn btn-lg btn-primary btn-block" ' + 
+      'type="submit">Opret</button>',
+      '<button id="btn-back" ' +
+      'class="btn-back btn btn-lg btn-danger btn-block" ' +
+      'type="button">Annuller</button>'
+    ],
+    ShowOrder: [
+      '<h2 class="form-new-heading">Ordre</h2>',
+      InputGen("cid", "hidden"), 
+      InputGen("id", "hidden"),    
+      InputGen("name", "text"),
+      InputGen("email", "text"),
+      InputGen("number", "text"),
+      InputGen("make", "text"),
+      InputGen("model", "text"),
+      InputGen("cpu", "text"),
+      InputGen("ram", "text"),
+      InputGen("hdd", "text"),
+      InputGen("price", "text"),
+      InputGen("status", "select"),
+      '<button id="btn-submit" ' +
+      'class="btn btn-lg btn-primary btn-block" ' + 
+      'type="submit">Gem</button>',
+      '<button id="btn-back" ' +
+      'class="btn-back btn btn-lg btn-danger btn-block" ' +
+      'type="button">Annuller</button>'
+    ],
+    ShowPC: [
+      '<h2 class="form-new-heading">PC</h2>',
+      InputGen("make", "text"),
+      InputGen("model", "text"),
+      InputGen("serial", "text"),
+      InputGen("cpu", "text"),
+      InputGen("ram", "text"),
+      InputGen("hdd", "text"),
+      InputGen("description", "text"),
+      InputGen("status", "select"),
+      '<button id="btn-submit" ' +
+      'class="btn btn-lg btn-primary btn-block" ' + 
+      'type="submit">Gem</button>',
+      '<button id="btn-back" ' +
+      'class="btn-back btn btn-lg btn-danger btn-block" ' +
+      'type="button">Annuller</button>'
+    ]
+};
 var socket = io.connect('localhost');
 
 
@@ -99,14 +184,47 @@ socket.on("GetTemplatesResponse", function (TemplateData) { //Denne function st�
   InitTemplates(TemplateData);
 });
 
-socket.on("GetTemplateRamDiskResponse", function (TemplateRamDisk) { //Denne function står for at hente template information til formen
-  InitTemplatesRamDisk(TemplateRamDisk);
-});
  socket.on("InsertTemplateResponse", function (SaveTemplate) { //Denne function gemmer nye templates 
   InitSaveTemplate(SaveTemplate);
 });
 
+ socket.on("InsertPCResponse", function (InsertPC) { //Denne function gemmer nye PC'er
+  InitInsertPC(InsertPC);
+});
 
+
+socket.on("PCElementResponse", function (data){ 
+  console.log(data);
+  var StatusArray = [
+    {
+      value: "klar til salg"
+    },
+    {
+      value: "skrottet"
+    },
+    {
+      value: "ny"
+    }
+  ];
+  $("#form-new-edit").find("#cid").val(data[0][0].CID);
+  $("#form-new-edit").find("#id").val(data[0][0].WID);
+  $("#form-new-edit").find("#make").val(data[0][0].PCMake);
+  $("#form-new-edit").find("#model").val(data[0][0].PCModel);
+  $("#form-new-edit").find("#serial").val(data[0][0].Serial);   
+  $("#form-new-edit").find("#cpu").val(data[0][0].CPU);
+  $("#form-new-edit").find("#ram").val(data[0][0].RAM + "GB");
+  $("#form-new-edit").find("#hdd").val(data[0][0].hdd);
+  $("#form-new-edit").find("#description").val(data[0][0].Description);
+  StatusArray.forEach(element => {
+    $("#form-new-edit").find("#status").append('<option value="' + element.value + '">' + element.value + '</option>');
+  });
+  $("#form-new-edit").find("#status").val(data[0][0].ItemStatus.toLowerCase());
+  $("#form-new-edit").find(".form-control").each(function(){
+    if($(this).attr("id") == "status")
+    $(this).prop("disabled", true);
+    $(this).prop("readonly", true);
+});
+});
 
 
 socket.on("OrderByIDResponse", function (data) { //Denne function står for at tilføje ordrer data til formen
@@ -146,111 +264,19 @@ socket.on("OrderByIDResponse", function (data) { //Denne function står for at t
   $("#form-new-edit").find("#status").append('<option value="' + data[0][0].Status + '">' + data[0][0].Status + '</option>');
 });
 
-socket.on("ProductElementResponse", function (data) { //Denne function står for at tilføje pc data til formen
-  console.log(data);
-});
-
 socket.on('UpdateOrderResponse', function(DATA){//Denne function står for at vise tab1 siden igen efter succesfuld opdatering af ordre
   console.log(DATA);
   $(".tab").css("display", "");
     $("#form-new-edit").css("display", "");
     tab1();
 });
-var stararr = [];
-var checkboxarr = [];
-var tab = 1;
-var created = false;
-var currenttab = "tab-1";
-//Creates html strings for Forms Array
-function InputGen(name, type){
-    if(type.toLowerCase() == "select")
-    return '<div class="form-group">' +
-    '<label for="'+name+'">'+name+':</label>' +
-    '<select id="'+name+'" name="'+name+'"' + 
-    'class="form-control" required></select>'+
-    '</div>';
-    else if(type.toLowerCase() == "hidden")
-    return '<div class="form-group">' +
-    '<input type="'+type+'" id="'+name+'" ' +
-    'class="form-control" name="'+name+'" ' +
-    'placeholder="'+name+'"></div>';
-    else  
-    return '<div class="form-group">' +
-    '<label for="'+name+'">'+name+':</label>' +
-    '<input type="'+type+'" id="'+name+'" ' +
-    'class="form-control" name="'+name+'" ' +
-    'placeholder="'+name+'"></div>';
-  }
-//Bruges til at oprette de forskellige forms
-var Forms = {
-    CreatePC: [
-      '<h2 class="form-new-heading">Opret Ny PC</h2>',
-      InputGen("template", "select"),
-      InputGen("name", "text"),
-      InputGen("make", "text"),
-      InputGen("model", "text"),
-      InputGen("serial", "text"),
-      InputGen("cpu", "text"),
-      InputGen("ram", "select"),
-      InputGen("hdd", "select"),
-      InputGen("description", "text"),
-      InputGen("status", "select"),
-      '<button id="btn-submit" ' +
-      'class="btn btn-lg btn-primary btn-block" ' + 
-      'type="submit">Opret</button>',
-      '<button id="btn-back" ' +
-      'class="btn-back btn btn-lg btn-danger btn-block" ' +
-      'type="button">Annuller</button>'
-    ],
-    ShowOrder: [
-      '<h2 class="form-new-heading">Ordre</h2>',
-      InputGen("cid", "hidden"), 
-      InputGen("id", "hidden"),    
-      InputGen("name", "text"),
-      InputGen("email", "text"),
-      InputGen("number", "text"),
-      InputGen("make", "text"),
-      InputGen("model", "text"),
-      InputGen("cpu", "text"),
-      InputGen("ram", "text"),
-      InputGen("hdd", "text"),
-      InputGen("price", "text"),
-      InputGen("status", "select"),
-      '<button id="btn-submit" ' +
-      'class="btn btn-lg btn-primary btn-block" ' + 
-      'type="submit">Gem</button>',
-      '<button id="btn-back" ' +
-      'class="btn-back btn btn-lg btn-danger btn-block" ' +
-      'type="button">Annuller</button>'
-    ],
-    ShowPC: [
-      '<h2 class="form-new-heading">PC</h2>',
-      InputGen("template", "select"),
-      InputGen("make", "text"),
-      InputGen("model", "text"),
-      InputGen("serial", "text"),
-      InputGen("cpu", "text"),
-      InputGen("ram", "text"),
-      InputGen("hdd", "text"),
-      InputGen("description", "text"),
-      InputGen("status", "select"),
-      '<button id="btn-submit" ' +
-      'class="btn btn-lg btn-primary btn-block" ' + 
-      'type="submit">Gem</button>',
-      '<a id="btn-back" ' +
-      'class="btn-back btn btn-lg btn-danger btn-block" ' +
-      'type="button">Annuller</a>'
-    ]
-};
-
 //Denne her funktion står for at vise formen når man klikker på opret pc knappen
 $(".create-pc").click(function () {
     CreateForm("CreatePC");
     //Hente data til form
     socket.emit("RAMOptions");
     socket.emit("HDDOptions");
-    socket.emit("GetTemplates");
-    socket.emit("GetTemplateRamDisk");
+    socket.emit("GetTemplates"); 
 
     $(".create-pc").css("display", "");
     $("#form-new-edit").css("display", "block");
@@ -258,7 +284,7 @@ $(".create-pc").click(function () {
     $(".tab").css("display", "none");
 });
 
-//Denne her funktion står for at oprette PC'er når submit bliver klikket i formen
+//Denne her funktion står for at oprette PC'er / templates når submit bliver klikket i formen
 $("#altform").on("submit", function (ev) {
     ev.preventDefault();
     console.log(ev);
@@ -272,19 +298,30 @@ $("#altform").on("submit", function (ev) {
     var ram = $('#ram').val();
     var hdd = $('#hdd').val();
     var desc = $('#description').val();
+    var status = $('#status').val();
      if ($('#template').val() == 'ny') {
-    socket.emit("SaveTemplate", {
-        name: name,
-        make: make,
-        model: model,
-        cpu: cpu,
-        ram: ram,
-        hdd: hdd,
-        desc: desc
+        socket.emit("SaveTemplate", {
+            name: name,
+            make: make,
+            model: model,
+            cpu: cpu,
+            ram: ram,
+            hdd: hdd,
+            desc: desc
     });    
     }
     else
     {
+        socket.emit("InsertPC", {
+            make: make,
+            model: model,
+            serial: serial,
+            cpu: cpu,
+            ram: ram,
+            hdd: hdd,
+            desc: desc,
+            status: status
+        });
      }
  });
 
@@ -338,15 +375,16 @@ function addevents() {
             $("#form-new-edit").css("display", "block");
             $("#" + currenttab).css("display", "none");
             $(".tab").css("display", "none");
+            console.log(currenttab);
             if (currenttab == "tab-1")
                 DataInserter("ShowOrder", ID);
             else
                 DataInserter("ShowPC", ID);
+            $(".create-pc").css("display", "none");
         });
 
         //Denne her funktion står for at higlighte det element man har musen henover
         $('tr').hover(function () {
-            console.log("test");
             if (!$(this).find('input[type="checkbox"]').is(":checked"))
                 $(this).find(".checkmark").css("background", '#ccc');
             else
@@ -398,7 +436,7 @@ function addevents() {
         //Denne Click function står for at holde styr på de checkede felter og vise skraldespanden
         if (!created) {
             //created = !created;
-            $('.main tr input[type="checkbox"]').click(function test() {
+            $('.main tr input[type="checkbox"]').click(function() {
                 var checked;
                 checked = $(this).prop("checked");
                 var id = -1;
@@ -525,21 +563,6 @@ function InitHDD(HDDdata){
 }
 
 
-
-
-
-
-
-//Template GetTemplateRamDisk
-function InitTemplatesRamDisk(TemplateRamDisk){
-  $('#template').append('<option value="0"> --- </option>');
-  TemplateRamDisk[0].forEach((item, id) => {
-    // console.log(TemplateRamDisk);
-    // console.log(item);
-    // $('#template').append('<option value="'+item.ID+'">'+item.Name+ ' </option>');
-  });
-};
-
 //Templates
 function InitTemplates(TemplateData){
   $('#template').append('<option value="0"> --- </option>');
@@ -561,7 +584,7 @@ function InitTemplates(TemplateData){
     console.log(TemplateData);
   
     if ($('#template').val() != 0 && $('#template').val() != 'ny') {
-      var ID = 0
+      var ID = 0;
       TemplateData[0].forEach((element, id) => {
         if(element.ID == $(_this).val())
         ID = id;
@@ -614,20 +637,26 @@ function InitTemplates(TemplateData){
       $('#hdd').attr('disabled', false);
     }
   });
-};
+}
 
 function InitSaveTemplate(RAMdata){
   // Lav popup
-};
+}
 
 //Står for at Oprette formen
 function CreateForm(Form){
 $('#template').off();
 $(".close-form, .btn-back").off();
-$("#altform").html("");
+$("#altform, #SaveOrder").html("");
+$("#altform, #SaveOrder").attr("id", "altform");
 Forms[Form].forEach(element => {
   $("#altform").append(element);
 });
+if(Form == "CreatePC")
+$(".edit-form").css("display", "none");
+else
+$(".edit-form").css("display", "");
+
 $(".close-form, .btn-back").click(function () {
   $(".tab").css("display", "");
   if (currenttab == "tab-1") tab1();
@@ -641,7 +670,7 @@ function DataInserter(Form, ID){
   CreateForm(Form);
   var SQL = {
     ShowOrder: ["OrderByID" ,"CALL GetOrderByID(" + ID + ")"],
-    ShowPC: ["ProductElement" ,ID]
+    ShowPC: ["PCElement" ,ID]
   };
   socket.emit(SQL[Form][0] ,SQL[Form][1]);
 }

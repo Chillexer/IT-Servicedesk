@@ -26,7 +26,7 @@ function Submit(ev) {
         $("#email").prop("disabled",true);
         $("#orderForm").prop("disabled",true);
         $("#id").prop("disabled",true);
-        var socket = io.connect('http://192.168.0.63');
+        var socket = io.connect('http://localhost');
         var obj = "";
         socket.emit("OrderElement", {
             id: id,

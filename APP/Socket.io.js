@@ -13,6 +13,19 @@ module.exports = {
                 socket.emit("ProductElementResponse", data);
             });
         });
+        socket.on('PCElement', function (ID) {
+            SQL.GetPC(ID, function (err, data) {
+                if (err) throw err;
+                socket.emit("PCElementResponse", data);
+            });
+        });
+        socket.on('UpdatePC', function (DATA){
+            var sqlString = "UpdatePCByID  ";  //skriv data der skal med          
+            SQL.SocketQuery(sqlString, function (err, data) {
+                if (err) throw err;
+                socket.emit("UpdatePCResponse", data);
+             });
+        });
         socket.on('OrderByID', function (sqlString) {
             SQL.SocketQuery(sqlString, function (err, data) {
                 if (err) throw err;
@@ -25,7 +38,6 @@ module.exports = {
                 socket.emit("OrderElementResponse", data);
             });
         });
-
         socket.on('RAMOptions', function () {
             SQL.GetRAMOptions(function (err, data) {
                 if (err) throw err;
@@ -42,6 +54,12 @@ module.exports = {
             SQL.GetTemplates(function (err, data) {
                 if (err) throw err;
                 socket.emit("GetTemplatesResponse", data);
+            });
+        });
+        socket.on('InsertPC', function (PCinput) {
+            SQL.InsertPC(function (err, data) {
+                if (err) throw err;
+                socket.emit("InsertPCResponse", data);
             });
         });
         socket.on('OSOptions', function () {

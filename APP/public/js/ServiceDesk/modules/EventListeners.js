@@ -1,12 +1,10 @@
-
 //Denne her funktion står for at vise formen når man klikker på opret pc knappen
 $(".create-pc").click(function () {
     CreateForm("CreatePC");
     //Hente data til form
     socket.emit("RAMOptions");
     socket.emit("HDDOptions");
-    socket.emit("GetTemplates");
-    socket.emit("GetTemplateRamDisk");
+    socket.emit("GetTemplates"); 
 
     $(".create-pc").css("display", "");
     $("#form-new-edit").css("display", "block");
@@ -14,7 +12,7 @@ $(".create-pc").click(function () {
     $(".tab").css("display", "none");
 });
 
-//Denne her funktion står for at oprette PC'er når submit bliver klikket i formen
+//Denne her funktion står for at oprette PC'er / templates når submit bliver klikket i formen
 $("#altform").on("submit", function (ev) {
     ev.preventDefault();
     console.log(ev);
@@ -28,19 +26,30 @@ $("#altform").on("submit", function (ev) {
     var ram = $('#ram').val();
     var hdd = $('#hdd').val();
     var desc = $('#description').val();
+    var status = $('#status').val();
      if ($('#template').val() == 'ny') {
-    socket.emit("SaveTemplate", {
-        name: name,
-        make: make,
-        model: model,
-        cpu: cpu,
-        ram: ram,
-        hdd: hdd,
-        desc: desc
+        socket.emit("SaveTemplate", {
+            name: name,
+            make: make,
+            model: model,
+            cpu: cpu,
+            ram: ram,
+            hdd: hdd,
+            desc: desc
     });    
     }
     else
     {
+        socket.emit("InsertPC", {
+            make: make,
+            model: model,
+            serial: serial,
+            cpu: cpu,
+            ram: ram,
+            hdd: hdd,
+            desc: desc,
+            status: status
+        });
      }
  });
 
@@ -94,15 +103,16 @@ function addevents() {
             $("#form-new-edit").css("display", "block");
             $("#" + currenttab).css("display", "none");
             $(".tab").css("display", "none");
+            console.log(currenttab);
             if (currenttab == "tab-1")
                 DataInserter("ShowOrder", ID);
             else
                 DataInserter("ShowPC", ID);
+            $(".create-pc").css("display", "none");
         });
 
         //Denne her funktion står for at higlighte det element man har musen henover
         $('tr').hover(function () {
-            console.log("test");
             if (!$(this).find('input[type="checkbox"]').is(":checked"))
                 $(this).find(".checkmark").css("background", '#ccc');
             else
@@ -154,7 +164,7 @@ function addevents() {
         //Denne Click function står for at holde styr på de checkede felter og vise skraldespanden
         if (!created) {
             //created = !created;
-            $('.main tr input[type="checkbox"]').click(function test() {
+            $('.main tr input[type="checkbox"]').click(function() {
                 var checked;
                 checked = $(this).prop("checked");
                 var id = -1;
