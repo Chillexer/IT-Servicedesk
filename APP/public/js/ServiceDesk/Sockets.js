@@ -95,9 +95,17 @@ socket.on("HDDOptionsResponse", function (HDDdata) { //Denne function står for 
 });
 
 socket.on("GetTemplatesResponse", function (TemplateData) { //Denne function står for at tilføje de forskellige templates til formen
-  console.log(TemplateData);
   InitTemplates(TemplateData);
 });
+
+socket.on("GetTemplateRamDiskResponse", function (TemplateRamDisk) { //Denne function står for at hente template information til formen
+  InitTemplatesRamDisk(TemplateRamDisk);
+});
+
+socket.on("InsertTemplateResponse", function (SaveTemplate) { //Denne function gemmer nye templates 
+  InitSaveTemplate(SaveTemplate);
+});
+
 
 socket.on("OrderByIDResponse", function (data) { //Denne function står for at tilføje ordrer data til formen
   $("#form-new-edit").find("#id").val(data[0][0].WID);

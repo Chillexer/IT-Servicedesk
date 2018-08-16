@@ -51,6 +51,11 @@ module.exports = {
       callback(err, data);
     });
   },
+  SaveTemplate: function (tempinput, callback) {
+    this.SQLQuery("CALL InsertTemplate('"+tempinput.name+"', '"+tempinput.make+"', '"+tempinput.model+"', '"+tempinput.cpu+"', '"+tempinput.ram+"', '"+tempinput.hdd+"','"+tempinput.desc+"')", function (err, data) {
+      callback(err, data);
+    });
+  },
   SocketQuery: function (sql, callback) {
     this.SQLQuery(sql, function (err, data) {
       callback(err, data);

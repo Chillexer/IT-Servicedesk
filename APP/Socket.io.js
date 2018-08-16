@@ -44,6 +44,18 @@ module.exports = {
                 socket.emit("GetTemplatesResponse", data);
             });
         });
+        socket.on('GetTemplateRamDisk', function () {
+            SQL.GetTemplates(function (err, data) {
+                if (err) throw err;
+                socket.emit("GetTemplateRamDiskResponse", data);
+            });
+        });
+        socket.on('SaveTemplate', function (input) {
+            SQL.SaveTemplate(input, function (err, data) {
+                if (err) throw err;
+                socket.emit("SaveTemplateResponse", data);
+            });
+        });
         socket.on('OSOptions', function () {
             SQL.GetOSOptions(function (err, data) {
                 if (err) throw err;

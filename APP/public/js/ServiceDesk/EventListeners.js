@@ -4,6 +4,7 @@ $(".create-pc").click(function () {
     socket.emit("RAMOptions");
     socket.emit("HDDOptions");
     socket.emit("GetTemplates");
+    socket.emit("GetTemplateRamDisk");
 
     $(".create-pc").css("display", "");
     $("#form-new-edit").css("display", "block");
@@ -11,10 +12,36 @@ $(".create-pc").click(function () {
     $(".tab").css("display", "none");
 });
 
-$("#newproductform").on("submit", function (ev) {
+$("#altform").on("submit", function (ev) {
     ev.preventDefault();
-    var data = $("#newproductform").serializeArray();
+    var data = $("#altform").serializeArray();
     $(".tab").css("display", "");
+
+    //console.log($('#make').val());
+    var name = $('#name').val();
+    var make = $('#make').val();
+    var model = $('#model').val();
+    var cpu = $('#cpu').val();
+    var ram = $('#ram').val();
+    var hdd = $('#hdd').val();
+    var desc = $('#description').val();
+
+    if ($('#template').val() == 'ny') {
+    socket.emit("SaveTemplate", {
+        name: name,
+        make: make,
+        model: model,
+        cpu: cpu,
+        ram: ram,
+        hdd: hdd,
+        desc: desc
+    });    
+    }
+    else
+    {
+
+    }
+
 });
 
 $(".close-form, #btn-back").click(function () {
