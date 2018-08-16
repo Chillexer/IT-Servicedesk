@@ -2,9 +2,7 @@ body {
     font-family: "Lato", sans-serif;
     margin: 0;
 }
-input:read-only { 
-    background-color: rgb(221, 221, 221);
-}
+
 
 .sidenav {
     height: 100%;
@@ -171,6 +169,17 @@ input:read-only {
     border-bottom: none;
     color: black;
 }
+.main .edit-form{
+    user-select: none;
+    width: 25px;
+    font-size: 130%;
+    cursor: pointer;
+    position: absolute;
+    left: 360px;
+    top: 70px;
+    border-bottom: none;
+    color: black;
+}
 #form-new-edit{
     display:none;
 }
@@ -301,6 +310,9 @@ input:read-only {
     .main .close-form{
         left: 15px;
     }
+    .main .edit-form{
+        left: 60px;
+    }
 }
 .form-new-heading{
     font-size: 20px;
@@ -326,6 +338,9 @@ input:read-only {
     -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+input:read-only, select:disabled { 
+    background-color: rgb(221, 221, 221);
 }
 
 .btn-block {

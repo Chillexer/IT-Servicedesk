@@ -3,27 +3,27 @@ var checkboxarr = [];
 var tab = 1;
 var created = false;
 var currenttab = "tab-1";
-
+//Creates html strings for Forms Array
 function InputGen(name, type){
     if(type.toLowerCase() == "select")
     return '<div class="form-group">' +
     '<label for="'+name+'">'+name+':</label>' +
     '<select id="'+name+'" name="'+name+'"' + 
     'class="form-control" required></select>'+
-    '</div>'
+    '</div>';
     else if(type.toLowerCase() == "hidden")
     return '<div class="form-group">' +
     '<input type="'+type+'" id="'+name+'" ' +
     'class="form-control" name="'+name+'" ' +
-    'placeholder="'+name+'"></div>'
+    'placeholder="'+name+'"></div>';
     else  
     return '<div class="form-group">' +
     '<label for="'+name+'">'+name+':</label>' +
     '<input type="'+type+'" id="'+name+'" ' +
     'class="form-control" name="'+name+'" ' +
-    'placeholder="'+name+'"></div>'
+    'placeholder="'+name+'"></div>';
   }
-
+//Bruges til at oprette de forskellige forms
 var Forms = {
     CreatePC: [
       '<h2 class="form-new-heading">Opret Ny PC</h2>',
@@ -41,11 +41,12 @@ var Forms = {
       'class="btn btn-lg btn-primary btn-block" ' + 
       'type="submit">Opret</button>',
       '<button id="btn-back" ' +
-      'class="btn btn-lg btn-danger btn-block" ' +
-      'type="">Annuller</button>'
+      'class="btn-back btn btn-lg btn-danger btn-block" ' +
+      'type="button">Annuller</button>'
     ],
     ShowOrder: [
       '<h2 class="form-new-heading">Ordre</h2>',
+      InputGen("cid", "hidden"), 
       InputGen("id", "hidden"),    
       InputGen("name", "text"),
       InputGen("email", "text"),
@@ -61,8 +62,8 @@ var Forms = {
       'class="btn btn-lg btn-primary btn-block" ' + 
       'type="submit">Gem</button>',
       '<button id="btn-back" ' +
-      'class="btn btn-lg btn-danger btn-block" ' +
-      'type="">Annuller</button>'
+      'class="btn-back btn btn-lg btn-danger btn-block" ' +
+      'type="button">Annuller</button>'
     ],
     ShowPC: [
       '<h2 class="form-new-heading">PC</h2>',
@@ -78,8 +79,8 @@ var Forms = {
       '<button id="btn-submit" ' +
       'class="btn btn-lg btn-primary btn-block" ' + 
       'type="submit">Gem</button>',
-      '<button id="btn-back" ' +
-      'class="btn btn-lg btn-danger btn-block" ' +
-      'type="">Annuller</button>'
+      '<a id="btn-back" ' +
+      'class="btn-back btn btn-lg btn-danger btn-block" ' +
+      'type="button">Annuller</a>'
     ]
 };

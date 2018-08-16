@@ -7,11 +7,9 @@
     <title>Ticketsystem</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="/lib/socket.io/socket.io.js"></script>
-    <script src="/js/ServiceDesk/Sockets.js"></script>
-    <script src="/js/ServiceDesk/Variables.js"></script>
     <link href="/lib/googleFonts/MaterialIcons.css" rel="stylesheet">
     <script src="/lib/jquery-3.3.1/jquery-3.3.1.min.js"></script>
-    <link rel="stylesheet" href="/css/ServiceDesk/ServiceDesk.css">
+    <link rel="stylesheet" href="/css/ServiceDesk/compiled/mystyle.css">
 </head>
 
 <body>
@@ -33,11 +31,11 @@
             <input type="text" name="search_text" id="search_text" placeholder="Søg i ordrer">
         </form>
         <div class="tab">
-            <button id="tab-btn-1" class="tablinks active" onclick="changeTab(event, 'tab-1')">
+            <button id="tab-btn-1" class="tablinks active">
                 <span class="material-icons" style="float: left;">assignment</span>Ordrer</button>
-            <button id="tab-btn-2" class="tablinks" onclick="changeTab(event, 'tab-2')">
+            <button id="tab-btn-2" class="tablinks">
                 <span class="material-icons" style="float: left;">computer</span>Klargjorte Computere</button>
-            <button id="tab-btn-3" class="tablinks" onclick="changeTab(event, 'tab-3')">
+            <button id="tab-btn-3" class="tablinks">
                 <span class="material-icons" style="float: left;">devices</span>Computere</button>
         </div>
         <table  id="tab-1" class="tabcontent">
@@ -122,6 +120,9 @@
                 <i class="material-icons close-form">
                         backspace
                         </i>
+                        <i class="material-icons edit-form">
+                            edit
+                            </i>
             
                 <!-- <form class="form-new" method="POST" id="newproductform">
                 
@@ -165,7 +166,7 @@
                     <button id="btn-back" class="btn btn-lg btn-danger btn-block" type="">Annuller</button>
                 </form> -->
 
-                <form class="form-new" action="/createpc" method="POST" id="altform">
+                <form class="form-new" method="POST" id="altform">
         
                     <div class="form-group">
                         <label for="Status"> Template: </label>
@@ -204,12 +205,11 @@
                         <select id="inputStatus" name="Status" class="form-control" required> <option value="Ukendt">Ukendt</option> <option value="Klar til salg">Klar til salg</option> <option value="Venter på reservedele">Venter på reservedele</option> <option value="Skal skrottes">Skal skrottes</option> </select>
                     </div>
                     <button id="btn-submit" class="btn btn-lg btn-primary btn-block" type="submit">Opret</button>
-                    <button id="btn-back" class="btn btn-lg btn-danger btn-block" type="">Annuller</button>
+                    <button id="btn-back" type="button" class="btn-back btn btn-lg btn-danger btn-block">Annuller</button>
                 </form>
         </div>
     </div>
     
-    <script src="/js/ServiceDesk/EventListeners.js"></script>
     <script src="/js/ServiceDesk/ServiceDesk.js"></script>
 </body>
 

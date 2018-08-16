@@ -87,6 +87,20 @@ module.exports = {
                 socket.emit("DeleteMultiplePCResponse", data);
             });
         });
+        socket.on('UpdateOrder', function(DATA){
+            var sqlString = "CALL UpdateOrderByID("+ DATA[1].value +
+            ", '"+DATA[2].value.split(" ")[0]+
+            "', '"+DATA[2].value.split(" ")[1] + 
+            "', "+DATA[8].value.replace(/\D/g,'')+
+            ", '"+DATA[11].value+
+            "', '"+DATA[3].value+
+            "', '"+DATA[4].value+
+            "', "+DATA[0].value+")";
+            SQL.SocketQuery(sqlString, function (err, data) {
+                if (err) throw err;
+                socket.emit("UpdateOrderResponse", data);
+            });
+        });
 
 
     }
