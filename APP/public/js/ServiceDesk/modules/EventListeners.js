@@ -6,6 +6,7 @@ $(".create-pc").click(function () {
     socket.emit("RAMOptions");
     socket.emit("HDDOptions");
     socket.emit("GetTemplates");
+    socket.emit("GetTemplateRamDisk");
 
     $(".create-pc").css("display", "");
     $("#form-new-edit").css("display", "block");
@@ -19,7 +20,29 @@ $("#altform").on("submit", function (ev) {
     console.log(ev);
     var data = $("#altform").serializeArray();
     $(".tab").css("display", "");
-});
+     //console.log($('#make').val());
+    var name = $('#name').val();
+    var make = $('#make').val();
+    var model = $('#model').val();
+    var cpu = $('#cpu').val();
+    var ram = $('#ram').val();
+    var hdd = $('#hdd').val();
+    var desc = $('#description').val();
+     if ($('#template').val() == 'ny') {
+    socket.emit("SaveTemplate", {
+        name: name,
+        make: make,
+        model: model,
+        cpu: cpu,
+        ram: ram,
+        hdd: hdd,
+        desc: desc
+    });    
+    }
+    else
+    {
+     }
+ });
 
 
 //Denne her function står for at gøre det muligt at redigere felterne i formen når man klikker på edit knappen
@@ -44,12 +67,10 @@ $(".delete-selected").click(function () {
 
 //Denne her funktion fjerner EventListeners fra alle objekter som bliver slettet fra siden
 function removeevents() {
-    $(function () {
         $('tr').off();
         $('.main tr input[type="checkbox"]').off();
         $('.main table tr .delete').off();
         $(".star").off();
-    });
 }
 
 
@@ -81,6 +102,7 @@ function addevents() {
 
         //Denne her funktion står for at higlighte det element man har musen henover
         $('tr').hover(function () {
+            console.log("test");
             if (!$(this).find('input[type="checkbox"]').is(":checked"))
                 $(this).find(".checkmark").css("background", '#ccc');
             else
@@ -111,6 +133,7 @@ function addevents() {
 
         //Denne funktion står for at Ændre farven på stjernerne 
         $(".star").on("click", function () {
+            console.log("hej");
             var id = -1;
             stararr.forEach((element, ID) => {
                 if (element.id == $(this).closest("tr").attr("id"))

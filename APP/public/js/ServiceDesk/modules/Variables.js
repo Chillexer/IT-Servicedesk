@@ -28,6 +28,7 @@ var Forms = {
     CreatePC: [
       '<h2 class="form-new-heading">Opret Ny PC</h2>',
       InputGen("template", "select"),
+      InputGen("name", "text"),
       InputGen("make", "text"),
       InputGen("model", "text"),
       InputGen("serial", "text"),

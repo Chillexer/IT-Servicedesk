@@ -25,7 +25,6 @@ socket.on("SQLQueryResponse", function (data) { //Denne function står for opret
         ' <i class = "material-icons delete" >delete</i> ' +
         '</td></tr >');
     });
-    addevents();
   } else if ($("#tab-btn-2").hasClass("active")) {
     $("#tab-2").css("display", "");
     $(".create-pc").css("display", "");
@@ -47,7 +46,6 @@ socket.on("SQLQueryResponse", function (data) { //Denne function står for opret
         ' <i class = "material-icons delete" >delete</i> ' +
         '</td></tr >');
     });
-    addevents();
   } else if ($("#tab-btn-1").hasClass("active")) {
     $("#tab-1").css("display", "");
     $('.main #searchdiv input[type="text"]').attr("placeholder", "Søg i Ordrer");
@@ -69,8 +67,9 @@ socket.on("SQLQueryResponse", function (data) { //Denne function står for opret
         ' <i class = "material-icons delete" >delete</i> ' +
         '</td></tr >');
     });
-    addevents();
+    
   }
+  addevents();
 });
 
 socket.on("DeletePCResponse", function (data) { //Denne function står for at opdatere tabellen når noget bliver slettet
@@ -96,9 +95,19 @@ socket.on("HDDOptionsResponse", function (HDDdata) { //Denne function står for 
 });
 
 socket.on("GetTemplatesResponse", function (TemplateData) { //Denne function står for at tilføje de forskellige templates til formen
-  console.log(TemplateData);
+  //console.log(TemplateData);
   InitTemplates(TemplateData);
 });
+
+socket.on("GetTemplateRamDiskResponse", function (TemplateRamDisk) { //Denne function står for at hente template information til formen
+  InitTemplatesRamDisk(TemplateRamDisk);
+});
+ socket.on("InsertTemplateResponse", function (SaveTemplate) { //Denne function gemmer nye templates 
+  InitSaveTemplate(SaveTemplate);
+});
+
+
+
 
 socket.on("OrderByIDResponse", function (data) { //Denne function står for at tilføje ordrer data til formen
   $("#form-new-edit").find("#cid").val(data[0][0].CID);

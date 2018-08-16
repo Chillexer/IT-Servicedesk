@@ -25,7 +25,6 @@ socket.on("SQLQueryResponse", function (data) { //Denne function står for opret
         ' <i class = "material-icons delete" >delete</i> ' +
         '</td></tr >');
     });
-    addevents();
   } else if ($("#tab-btn-2").hasClass("active")) {
     $("#tab-2").css("display", "");
     $(".create-pc").css("display", "");
@@ -47,7 +46,6 @@ socket.on("SQLQueryResponse", function (data) { //Denne function står for opret
         ' <i class = "material-icons delete" >delete</i> ' +
         '</td></tr >');
     });
-    addevents();
   } else if ($("#tab-btn-1").hasClass("active")) {
     $("#tab-1").css("display", "");
     $('.main #searchdiv input[type="text"]').attr("placeholder", "Søg i Ordrer");
@@ -69,8 +67,9 @@ socket.on("SQLQueryResponse", function (data) { //Denne function står for opret
         ' <i class = "material-icons delete" >delete</i> ' +
         '</td></tr >');
     });
-    addevents();
+    
   }
+  addevents();
 });
 
 socket.on("DeletePCResponse", function (data) { //Denne function står for at opdatere tabellen når noget bliver slettet
@@ -96,9 +95,19 @@ socket.on("HDDOptionsResponse", function (HDDdata) { //Denne function står for 
 });
 
 socket.on("GetTemplatesResponse", function (TemplateData) { //Denne function står for at tilføje de forskellige templates til formen
-  console.log(TemplateData);
+  //console.log(TemplateData);
   InitTemplates(TemplateData);
 });
+
+socket.on("GetTemplateRamDiskResponse", function (TemplateRamDisk) { //Denne function står for at hente template information til formen
+  InitTemplatesRamDisk(TemplateRamDisk);
+});
+ socket.on("InsertTemplateResponse", function (SaveTemplate) { //Denne function gemmer nye templates 
+  InitSaveTemplate(SaveTemplate);
+});
+
+
+
 
 socket.on("OrderByIDResponse", function (data) { //Denne function står for at tilføje ordrer data til formen
   $("#form-new-edit").find("#cid").val(data[0][0].CID);
@@ -177,6 +186,7 @@ var Forms = {
     CreatePC: [
       '<h2 class="form-new-heading">Opret Ny PC</h2>',
       InputGen("template", "select"),
+      InputGen("name", "text"),
       InputGen("make", "text"),
       InputGen("model", "text"),
       InputGen("serial", "text"),
@@ -240,6 +250,7 @@ $(".create-pc").click(function () {
     socket.emit("RAMOptions");
     socket.emit("HDDOptions");
     socket.emit("GetTemplates");
+    socket.emit("GetTemplateRamDisk");
 
     $(".create-pc").css("display", "");
     $("#form-new-edit").css("display", "block");
@@ -253,7 +264,29 @@ $("#altform").on("submit", function (ev) {
     console.log(ev);
     var data = $("#altform").serializeArray();
     $(".tab").css("display", "");
-});
+     //console.log($('#make').val());
+    var name = $('#name').val();
+    var make = $('#make').val();
+    var model = $('#model').val();
+    var cpu = $('#cpu').val();
+    var ram = $('#ram').val();
+    var hdd = $('#hdd').val();
+    var desc = $('#description').val();
+     if ($('#template').val() == 'ny') {
+    socket.emit("SaveTemplate", {
+        name: name,
+        make: make,
+        model: model,
+        cpu: cpu,
+        ram: ram,
+        hdd: hdd,
+        desc: desc
+    });    
+    }
+    else
+    {
+     }
+ });
 
 
 //Denne her function står for at gøre det muligt at redigere felterne i formen når man klikker på edit knappen
@@ -278,12 +311,10 @@ $(".delete-selected").click(function () {
 
 //Denne her funktion fjerner EventListeners fra alle objekter som bliver slettet fra siden
 function removeevents() {
-    $(function () {
         $('tr').off();
         $('.main tr input[type="checkbox"]').off();
         $('.main table tr .delete').off();
         $(".star").off();
-    });
 }
 
 
@@ -315,6 +346,7 @@ function addevents() {
 
         //Denne her funktion står for at higlighte det element man har musen henover
         $('tr').hover(function () {
+            console.log("test");
             if (!$(this).find('input[type="checkbox"]').is(":checked"))
                 $(this).find(".checkmark").css("background", '#ccc');
             else
@@ -345,6 +377,7 @@ function addevents() {
 
         //Denne funktion står for at Ændre farven på stjernerne 
         $(".star").on("click", function () {
+            console.log("hej");
             var id = -1;
             stararr.forEach((element, ID) => {
                 if (element.id == $(this).closest("tr").attr("id"))
@@ -443,6 +476,22 @@ $(".tablinks").each(function(){
 });
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //de her 3 funktioner står for at hente det rigtige data til de 3 tabs
 function tab3() {
   var sql = "SELECT * FROM `PC` where ItemStatus != 'klar til salg' AND ItemStatus != 'skrottet'";
@@ -475,34 +524,102 @@ function InitHDD(HDDdata){
   });
 }
 
+
+
+
+
+
+
+//Template GetTemplateRamDisk
+function InitTemplatesRamDisk(TemplateRamDisk){
+  $('#template').append('<option value="0"> --- </option>');
+  TemplateRamDisk[0].forEach((item, id) => {
+    // console.log(TemplateRamDisk);
+    // console.log(item);
+    // $('#template').append('<option value="'+item.ID+'">'+item.Name+ ' </option>');
+  });
+};
+
 //Templates
 function InitTemplates(TemplateData){
   $('#template').append('<option value="0"> --- </option>');
+  $('#template').append('<option value="ny"> Ny Template </option>');
   TemplateData[0].forEach((item, id) => {
-      console.log(TemplateData);
-      console.log(item);
+    // console.log(TemplateData);
+      // console.log(item);
       $('#template').append('<option value="'+item.ID+'">'+item.Name+ ' </option>');
+      //Add status options
+      $('#status').append('<option value="Ukendt" selected="selected">Ukendt</option>');
+      $('#status').append('<option value="Klar til salg">Klar til salg</option>');
+      $('#status').append('<option value="Venter på reservedele">Venter på reservedele</option>');
+      $('#status').append('<option value="Skrottet">Skrottet</option>');
   });
 
   $('#template').on('change', function () {
-    console.log($('#template').val());
+    //console.log($('#template').val());
+    var _this = this;
+    console.log(TemplateData);
   
-    if ($('#template').val() != 0) {
-      $('#make').val(TemplateData[0][0].PCMake);
-      $('#model').val(TemplateData[0][0].PCModel);
-      $('#cpu').val(TemplateData[0][0].CPU);
-      $('#description').val(TemplateData[0][0].Description);
-
+    if ($('#template').val() != 0 && $('#template').val() != 'ny') {
+      var ID = 0
+      TemplateData[0].forEach((element, id) => {
+        if(element.ID == $(_this).val())
+        ID = id;
+      });
+      $('#name').val(TemplateData[0][ID].Name);
+      $('#make').val(TemplateData[0][ID].PCMake);
+      $('#model').val(TemplateData[0][ID].PCModel);
+      $('#cpu').val(TemplateData[0][ID].CPU);
+      $('#description').val(TemplateData[0][ID].Description);
+      $('#ram').val(TemplateData[0][ID].RAM);
+      $('#hdd').val(TemplateData[0][ID].HDD);
+       $('#name').prop('readonly', 'readonly');
       $('#make').prop('readonly', 'readonly');
       $('#model').prop('readonly', 'readonly');
       $('#cpu').prop('readonly', 'readonly');
       $('#description').prop('readonly', 'readonly');
-
+      $('#ram').attr('disabled', 'disabled');
+      $('#hdd').attr('disabled', 'disabled');
     }
+    else if ($('#template').val() == 'ny')
+    {
+      // remove readonly og gammelt input
+      $('#name').val("");
+      $('#make').val("");
+      $('#model').val("");
+      $('#cpu').val("");
+      $('#description').val("");
+       $('#name').prop('readonly', false);
+      $('#make').prop('readonly', false);
+      $('#model').prop('readonly', false);
+      $('#cpu').prop('readonly', false);
+      $('#description').prop('readonly', false);
+      $('#ram').attr('disabled', false);
+      $('#hdd').attr('disabled', false);
+     }
   
+    else
+    {
+      $('#name').val("");
+      $('#make').val("");
+      $('#model').val("");
+      $('#cpu').val("");
+      $('#description').val("");
+       $('#name').prop('readonly', false);
+      $('#make').prop('readonly', false);
+      $('#model').prop('readonly', false);
+      $('#cpu').prop('readonly', false);
+      $('#description').prop('readonly', false);
+      $('#ram').attr('disabled', false);
+      $('#hdd').attr('disabled', false);
+    }
   });
+};
 
-}
+function InitSaveTemplate(RAMdata){
+  // Lav popup
+};
+
 //Står for at Oprette formen
 function CreateForm(Form){
 $('#template').off();
