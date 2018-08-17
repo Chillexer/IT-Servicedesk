@@ -21,8 +21,9 @@ module.exports = {
     });
   },
     InsertPC: function (PCinput, callback) {
-    this.SQLQuery("CALL InsertPC('"+PCinput.make+"', '"+PCinput.model+"', '"+PCinput.serial+"', '"+PCinput.cpu+"', '"+PCinput.ram+"', '"+PCinput.hdd+"','"+PCinput.desc+"', '"+PCinput.status+"')", function (err, data) {
-      callback(err, data);
+      var sql = "CALL InsertPC('"+PCinput.make+"', '"+PCinput.model+"', '"+PCinput.serial+"', '"+PCinput.cpu+"', '"+PCinput.ram+"', '"+PCinput.hdd+"','"+PCinput.desc+"', '"+PCinput.status+"')";
+      this.SQLQuery(sql, function (err, data) {
+        callback(err, data);
     });
   },
   GetOrder: function (Criteria, callback) {
@@ -42,6 +43,11 @@ module.exports = {
   },
   GetPC: function (ID, callback) {
     this.SQLQuery("CALL GetPC(" + ID + ")", function (err, data) {
+      callback(err, data);
+    });
+  },
+  UpdatePCByID: function (sqlString, callback) {
+    this.SQLQuery(sqlStr+ing, function (err, data) {
       callback(err, data);
     });
   },

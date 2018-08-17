@@ -97,21 +97,20 @@ function InitHDD(HDDdata){
 function InitTemplates(TemplateData){
   $('#template').append('<option value="0"> --- </option>');
   $('#template').append('<option value="ny"> Ny Template </option>');
+  // Add status options
+  $('#status').append('<option value="Ukendt" selected="selected">Ukendt</option>');
+  $('#status').append('<option value="Klar til salg">Klar til salg</option>');
+  $('#status').append('<option value="Venter på reservedele">Venter på reservedele</option>');
+  $('#status').append('<option value="Skrottet">Skrottet</option>');
   TemplateData[0].forEach((item, id) => {
     // console.log(TemplateData);
       // console.log(item);
       $('#template').append('<option value="'+item.ID+'">'+item.Name+ ' </option>');
-      //Add status options
-      $('#status').append('<option value="Ukendt" selected="selected">Ukendt</option>');
-      $('#status').append('<option value="Klar til salg">Klar til salg</option>');
-      $('#status').append('<option value="Venter på reservedele">Venter på reservedele</option>');
-      $('#status').append('<option value="Skrottet">Skrottet</option>');
   });
 
   $('#template').on('change', function () {
     //console.log($('#template').val());
     var _this = this;
-    console.log(TemplateData);
   
     if ($('#template').val() != 0 && $('#template').val() != 'ny') {
       var ID = 0;
@@ -131,7 +130,7 @@ function InitTemplates(TemplateData){
       $('#model').prop('readonly', 'readonly');
       $('#cpu').prop('readonly', 'readonly');
       $('#description').prop('readonly', 'readonly');
-      $('#ram').attr('disabled', 'disabled');
+      //$('#ram').attr('disabled', 'disabled');
       $('#hdd').attr('disabled', 'disabled');
     }
     else if ($('#template').val() == 'ny')
@@ -158,7 +157,7 @@ function InitTemplates(TemplateData){
       $('#model').val("");
       $('#cpu').val("");
       $('#description').val("");
-       $('#name').prop('readonly', false);
+      $('#name').prop('readonly', true);
       $('#make').prop('readonly', false);
       $('#model').prop('readonly', false);
       $('#cpu').prop('readonly', false);
@@ -177,10 +176,10 @@ function InitSaveTemplate(RAMdata){
 function CreateForm(Form){
 $('#template').off();
 $(".close-form, .btn-back").off();
-$("#altform, #SaveOrder").html("");
-$("#altform, #SaveOrder").attr("id", "altform");
+$("#form-new-edit form").html("");
+$("#form-new-edit form").attr("id", "altform");
 Forms[Form].forEach(element => {
-  $("#altform").append(element);
+  $("#form-new-edit form").append(element);
 });
 if(Form == "CreatePC")
 $(".edit-form").css("display", "none");

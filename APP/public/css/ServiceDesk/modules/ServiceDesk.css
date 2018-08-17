@@ -36,7 +36,7 @@ body {
 }
 
 .main {
-    margin-left: 300px;
+    margin-left: 0;
     margin-top:8px;
     margin-right: 0;  /* Same as the width of the sidenav */
     font-size: 28px; /* Increased text to enable scrolling */
@@ -140,7 +140,7 @@ body {
     font-size: 130%;
     cursor: pointer;
     position: absolute;
-    left: 310px;
+    left: 10px;
     top: 12px;
     border-bottom: none;
     display: none;
@@ -158,13 +158,35 @@ body {
     border-bottom: none;
     color: black;
 }
+.main .NavMenuBut{
+    user-select: none;
+    width: 25px;
+    font-size: 130%;
+    cursor: pointer;
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    border-bottom: none;
+    color: black;
+}
+nav .NavMenuBut{
+    user-select: none;
+    width: 25px;
+    font-size: 130%;
+    cursor: pointer;
+    position: absolute;
+    left: 180px;
+    top: 19px;
+    border-bottom: none;
+    color: black;
+}
 .main .close-form{
     user-select: none;
     width: 25px;
     font-size: 130%;
     cursor: pointer;
     position: absolute;
-    left: 315px;
+    left: 15px;
     top: 70px;
     border-bottom: none;
     color: black;
@@ -175,7 +197,7 @@ body {
     font-size: 130%;
     cursor: pointer;
     position: absolute;
-    left: 360px;
+    left: 60px;
     top: 70px;
     border-bottom: none;
     color: black;
@@ -394,4 +416,91 @@ label {
     color: #ffffff;
     background-color: #d9534f;
     border-color: #d43f3a;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.cbp-spmenu {
+	background: #ffffff;
+	position: fixed;
+}
+
+.cbp-spmenu h3 {
+	color: #000000;
+	font-size: 1.9em;
+	padding: 20px;
+	margin: 0;
+	font-weight: 300;
+	background: #ffffff;
+}
+
+.cbp-spmenu a {
+	display: block;
+	color: rgb(0, 0, 0);
+	font-size: 1.1em;
+	font-weight: 300;
+}
+
+.cbp-spmenu a:hover {
+	background: #ffffff;
+}
+
+.cbp-spmenu a:active {
+	background: #afdefa;
+	color: #000000;
+}
+
+/* Orientation-dependent styles for the content of the menu */
+
+.cbp-spmenu-vertical {
+	width: 240px;
+	height: 100%;
+	top: 0;
+	z-index: 1000;
+}
+
+.cbp-spmenu-vertical a {
+	border-bottom: 1px solid #ffffff;
+	padding: 1em;
+}
+/* Vertical menu that slides from the left or right */
+
+.cbp-spmenu-left {
+	left: -240px;
+}
+
+.cbp-spmenu-left.cbp-spmenu-open {
+	left: 0px;
+}
+
+/* Transitions */
+
+.cbp-spmenu{
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+/* Example media queries */
+
+
+@media screen and (max-height: 26.375em){
+
+
+	.cbp-spmenu-left {
+		left: -190px;
+	}
+
 }

@@ -22,6 +22,7 @@ $("#altform").on("submit", function (ev) {
     var name = $('#name').val();
     var make = $('#make').val();
     var model = $('#model').val();
+    var serial = $('#serial').val();
     var cpu = $('#cpu').val();
     var ram = $('#ram').val();
     var hdd = $('#hdd').val();

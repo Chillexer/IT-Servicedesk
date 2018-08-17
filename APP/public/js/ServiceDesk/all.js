@@ -67,6 +67,7 @@ var Forms = {
     ],
     ShowPC: [
       '<h2 class="form-new-heading">PC</h2>',
+      InputGen("id", "hidden"),   
       InputGen("make", "text"),
       InputGen("model", "text"),
       InputGen("serial", "text"),
@@ -83,6 +84,7 @@ var Forms = {
       'type="button">Annuller</button>'
     ]
 };
+
 var socket = io.connect('localhost');
 
 
@@ -189,11 +191,13 @@ socket.on("GetTemplatesResponse", function (TemplateData) { //Denne function st�
 });
 
  socket.on("InsertPCResponse", function (InsertPC) { //Denne function gemmer nye PC'er
-  InitInsertPC(InsertPC);
+    $(".tab").css("display", "");
+    $("#form-new-edit").css("display", "");
+    tab3();
 });
 
 
-socket.on("PCElementResponse", function (data){ 
+socket.on("PCElementResponse", function (data){ //Denne function står for at tilføje UpdatePC data til formen
   console.log(data);
   var StatusArray = [
     {
@@ -206,14 +210,14 @@ socket.on("PCElementResponse", function (data){
       value: "ny"
     }
   ];
-  $("#form-new-edit").find("#cid").val(data[0][0].CID);
-  $("#form-new-edit").find("#id").val(data[0][0].WID);
+  
+  $("#form-new-edit").find("#id").val(data[0][0].ID);
   $("#form-new-edit").find("#make").val(data[0][0].PCMake);
   $("#form-new-edit").find("#model").val(data[0][0].PCModel);
   $("#form-new-edit").find("#serial").val(data[0][0].Serial);   
   $("#form-new-edit").find("#cpu").val(data[0][0].CPU);
   $("#form-new-edit").find("#ram").val(data[0][0].RAM + "GB");
-  $("#form-new-edit").find("#hdd").val(data[0][0].hdd);
+  $("#form-new-edit").find("#hdd").val(data[0][0].Storage);
   $("#form-new-edit").find("#description").val(data[0][0].Description);
   StatusArray.forEach(element => {
     $("#form-new-edit").find("#status").append('<option value="' + element.value + '">' + element.value + '</option>');
@@ -223,6 +227,16 @@ socket.on("PCElementResponse", function (data){
     if($(this).attr("id") == "status")
     $(this).prop("disabled", true);
     $(this).prop("readonly", true);
+    $("#form-new-edit form").attr("id","SavePC");
+  $("#SavePC").off();
+  $("#SavePC").on("submit", function (ev) {
+    ev.preventDefault();
+    if($("#form-new-edit").find("#ram").prop("readonly"))
+    return;
+    var data = $("#SavePC").serializeArray();
+    socket.emit("UpdatePC" ,data);
+    console.log(data);
+});
 });
 });
 
@@ -270,6 +284,15 @@ socket.on('UpdateOrderResponse', function(DATA){//Denne function står for at vi
     $("#form-new-edit").css("display", "");
     tab1();
 });
+
+socket.on('UpdatePCResponse', function(DATA){//Denne function står for at vise tab1 siden igen efter succesfuld opdatering af PC
+  console.log(DATA);
+  $(".tab").css("display", "");
+    $("#form-new-edit").css("display", "");
+    if (currenttab == "tab-1") tab1();
+    else if (currenttab == "tab-2") tab2();
+    else if (currenttab == "tab-3") tab3();
+});
 //Denne her funktion står for at vise formen når man klikker på opret pc knappen
 $(".create-pc").click(function () {
     CreateForm("CreatePC");
@@ -294,6 +317,7 @@ $("#altform").on("submit", function (ev) {
     var name = $('#name').val();
     var make = $('#make').val();
     var model = $('#model').val();
+    var serial = $('#serial').val();
     var cpu = $('#cpu').val();
     var ram = $('#ram').val();
     var hdd = $('#hdd').val();
@@ -567,21 +591,20 @@ function InitHDD(HDDdata){
 function InitTemplates(TemplateData){
   $('#template').append('<option value="0"> --- </option>');
   $('#template').append('<option value="ny"> Ny Template </option>');
+  // Add status options
+  $('#status').append('<option value="Ukendt" selected="selected">Ukendt</option>');
+  $('#status').append('<option value="Klar til salg">Klar til salg</option>');
+  $('#status').append('<option value="Venter på reservedele">Venter på reservedele</option>');
+  $('#status').append('<option value="Skrottet">Skrottet</option>');
   TemplateData[0].forEach((item, id) => {
     // console.log(TemplateData);
       // console.log(item);
       $('#template').append('<option value="'+item.ID+'">'+item.Name+ ' </option>');
-      //Add status options
-      $('#status').append('<option value="Ukendt" selected="selected">Ukendt</option>');
-      $('#status').append('<option value="Klar til salg">Klar til salg</option>');
-      $('#status').append('<option value="Venter på reservedele">Venter på reservedele</option>');
-      $('#status').append('<option value="Skrottet">Skrottet</option>');
   });
 
   $('#template').on('change', function () {
     //console.log($('#template').val());
     var _this = this;
-    console.log(TemplateData);
   
     if ($('#template').val() != 0 && $('#template').val() != 'ny') {
       var ID = 0;
@@ -601,7 +624,7 @@ function InitTemplates(TemplateData){
       $('#model').prop('readonly', 'readonly');
       $('#cpu').prop('readonly', 'readonly');
       $('#description').prop('readonly', 'readonly');
-      $('#ram').attr('disabled', 'disabled');
+      //$('#ram').attr('disabled', 'disabled');
       $('#hdd').attr('disabled', 'disabled');
     }
     else if ($('#template').val() == 'ny')
@@ -628,7 +651,7 @@ function InitTemplates(TemplateData){
       $('#model').val("");
       $('#cpu').val("");
       $('#description').val("");
-       $('#name').prop('readonly', false);
+      $('#name').prop('readonly', true);
       $('#make').prop('readonly', false);
       $('#model').prop('readonly', false);
       $('#cpu').prop('readonly', false);
@@ -647,10 +670,10 @@ function InitSaveTemplate(RAMdata){
 function CreateForm(Form){
 $('#template').off();
 $(".close-form, .btn-back").off();
-$("#altform, #SaveOrder").html("");
-$("#altform, #SaveOrder").attr("id", "altform");
+$("#form-new-edit form").html("");
+$("#form-new-edit form").attr("id", "altform");
 Forms[Form].forEach(element => {
-  $("#altform").append(element);
+  $("#form-new-edit form").append(element);
 });
 if(Form == "CreatePC")
 $(".edit-form").css("display", "none");

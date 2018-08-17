@@ -67,6 +67,7 @@ var Forms = {
     ],
     ShowPC: [
       '<h2 class="form-new-heading">PC</h2>',
+      InputGen("id", "hidden"),   
       InputGen("make", "text"),
       InputGen("model", "text"),
       InputGen("serial", "text"),

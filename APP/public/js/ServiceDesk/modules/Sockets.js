@@ -104,11 +104,13 @@ socket.on("GetTemplatesResponse", function (TemplateData) { //Denne function st�
 });
 
  socket.on("InsertPCResponse", function (InsertPC) { //Denne function gemmer nye PC'er
-  InitInsertPC(InsertPC);
+    $(".tab").css("display", "");
+    $("#form-new-edit").css("display", "");
+    tab3();
 });
 
 
-socket.on("PCElementResponse", function (data){ 
+socket.on("PCElementResponse", function (data){ //Denne function står for at tilføje UpdatePC data til formen
   console.log(data);
   var StatusArray = [
     {
@@ -121,14 +123,14 @@ socket.on("PCElementResponse", function (data){
       value: "ny"
     }
   ];
-  $("#form-new-edit").find("#cid").val(data[0][0].CID);
-  $("#form-new-edit").find("#id").val(data[0][0].WID);
+  
+  $("#form-new-edit").find("#id").val(data[0][0].ID);
   $("#form-new-edit").find("#make").val(data[0][0].PCMake);
   $("#form-new-edit").find("#model").val(data[0][0].PCModel);
   $("#form-new-edit").find("#serial").val(data[0][0].Serial);   
   $("#form-new-edit").find("#cpu").val(data[0][0].CPU);
   $("#form-new-edit").find("#ram").val(data[0][0].RAM + "GB");
-  $("#form-new-edit").find("#hdd").val(data[0][0].hdd);
+  $("#form-new-edit").find("#hdd").val(data[0][0].Storage);
   $("#form-new-edit").find("#description").val(data[0][0].Description);
   StatusArray.forEach(element => {
     $("#form-new-edit").find("#status").append('<option value="' + element.value + '">' + element.value + '</option>');
@@ -138,6 +140,16 @@ socket.on("PCElementResponse", function (data){
     if($(this).attr("id") == "status")
     $(this).prop("disabled", true);
     $(this).prop("readonly", true);
+    $("#form-new-edit form").attr("id","SavePC");
+  $("#SavePC").off();
+  $("#SavePC").on("submit", function (ev) {
+    ev.preventDefault();
+    if($("#form-new-edit").find("#ram").prop("readonly"))
+    return;
+    var data = $("#SavePC").serializeArray();
+    socket.emit("UpdatePC" ,data);
+    console.log(data);
+});
 });
 });
 
@@ -184,4 +196,13 @@ socket.on('UpdateOrderResponse', function(DATA){//Denne function står for at vi
   $(".tab").css("display", "");
     $("#form-new-edit").css("display", "");
     tab1();
+});
+
+socket.on('UpdatePCResponse', function(DATA){//Denne function står for at vise tab1 siden igen efter succesfuld opdatering af PC
+  console.log(DATA);
+  $(".tab").css("display", "");
+    $("#form-new-edit").css("display", "");
+    if (currenttab == "tab-1") tab1();
+    else if (currenttab == "tab-2") tab2();
+    else if (currenttab == "tab-3") tab3();
 });
