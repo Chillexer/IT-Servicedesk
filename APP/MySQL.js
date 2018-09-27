@@ -88,7 +88,7 @@ module.exports = {
     var mail = body.mail;
     var phone = body.phone;
     var status = "Ny";
-
+    RAM = RAM.replace(/\D/g, '');
     this.SQLQuery("CALL InsertOrder( '" + firstname + "', '" + lastname + "', '" + address + "', '" + phone + "', '" + mail + "', " + showroomID + ", " + RAM + ", '" + storage + "', '" + OS + "', '" + status + "')", function (err, data) {
       Callback(err, data);
     });

@@ -45,13 +45,15 @@ function Init(data,RAMdata){
 
     console.log(RAMdata);
     //console.log((data[0][0].Size));
-    $('#inputRAM').append('<option value="'+data[0][0].Size+'">'+data[0][0].Size+ ' GB RAM'+ '</option>');
+    // $('#inputRAM').val(data[0][0].Size);
+    $('#inputRAM').val(data[0][0].Size+ ' GB RAM');
+    // $('#inputRAM').append('<option value="'+data[0][0].Size+'">'+data[0][0].Size+ ' GB RAM'+ '</option>');
 
-    RAMdata[0].forEach((element, id) => {
-        console.log(element);
-        if (element.Size > data[0][0].Size) {
-            $('#inputRAM').append('<option value="'+element.Size+'">'+element.Size+ ' GB RAM     +'+ (element.Price - data[0][0].price) +'</option>');
-        }
-    });
+    // RAMdata[0].forEach((element, id) => {
+    //     console.log(element);
+    //     if (element.Size > data[0][0].Size) {
+    //         $('#inputRAM').append('<option value="'+element.Size+'">'+element.Size+ ' GB RAM     +'+ (element.Price - data[0][0].price) +'</option>');
+    //     }
+    // });
 
  }

@@ -58,6 +58,7 @@ var Forms = {
       InputGen("hdd", "text"),
       InputGen("price", "text"),
       InputGen("status", "select"),
+      InputGen("PC", "select"),
       '<button id="btn-submit" ' +
       'class="btn btn-lg btn-primary btn-block" ' + 
       'type="submit">Gem</button>',
@@ -275,7 +276,27 @@ socket.on("OrderByIDResponse", function (data) { //Denne function står for at t
   });
   $("#form-new-edit").find("#hdd").val(Diskstring);
   $("#form-new-edit").find("#price").val(data[0][0].Price);
-  $("#form-new-edit").find("#status").append('<option value="' + data[0][0].Status + '">' + data[0][0].Status + '</option>');
+  var choice = "ny";
+  if(data[0][0].Status.toLowerCase() == "ny")
+  choice = "afsluttet";
+  $("#form-new-edit").find("#status").append('<option value="' + data[0][0].Status + '">' + data[0][0].Status + '</option><option value="'+choice+'">'+choice+'</option>');
+  $("#form-new-edit").find("#PC").append("<option>ingen</option>");
+  $("#form-new-edit").find("#status").off();
+  $("#form-new-edit").find("#PC").prop("disabled", true);
+  $("#form-new-edit").find("#status").change(function(){
+    if($(this).val() == "Ny")
+    $("#form-new-edit").find("#PC").prop("disabled", true);
+    else
+    $("#form-new-edit").find("#PC").prop("disabled", false);
+  });
+  socket.emit("GetPCs");
+});
+
+socket.on("GetPCsResponse", function(data){
+  data.forEach(element => {
+    $("#form-new-edit").find("#PC").append('<option value="'+element.ID+'">'+element.PCMake+ ' ' +element.PCModel+'</option>');
+  });
+    $("#form-new-edit").find("#PC").val(data[0][0].PC);
 });
 
 socket.on('UpdateOrderResponse', function(DATA){//Denne function står for at vise tab1 siden igen efter succesfuld opdatering af ordre
@@ -696,4 +717,30 @@ function DataInserter(Form, ID){
     ShowPC: ["PCElement" ,ID]
   };
   socket.emit(SQL[Form][0] ,SQL[Form][1]);
+}
+
+$("#search_text").keyup(function(){
+  var input, filter, table, tr, td, td2, i;
+  input = document.getElementById("search_text");
+  filter = input.value.toUpperCase();
+  table = document.getElementById(currenttab);
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    td2 = tr[i].getElementsByTagName("td")[3];
+    if (td || td2) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) == -1 && td2.innerHTML.toUpperCase().indexOf(filter) == -1) {
+        tr[i].style.display = "none";
+      } else {
+        tr[i].style.display = "";
+      }
+    } 
+  }
+});
+
+function search() {
+  // Declare variables 
+  
 }

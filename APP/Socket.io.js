@@ -111,7 +111,8 @@ module.exports = {
             ", '"+DATA[11].value+
             "', '"+DATA[3].value+
             "', '"+DATA[4].value+
-            "', "+DATA[0].value+")";
+            "', "+DATA[0].value+
+            ", "+DATA[12].value+")";
             SQL.SocketQuery(sqlString, function (err, data) {
                 if (err) throw err;
                 socket.emit("UpdateOrderResponse", data);
@@ -127,6 +128,12 @@ module.exports = {
             SQL.SaveTemplate(input, function (err, data) {
                 if (err) throw err;
                 socket.emit("SaveTemplateResponse", data);
+            });
+        });
+        socket.on("GetPCs", function(){
+            SQL.SocketQuery("SELECT * FROM `PC` where ItemStatus = 'klar til salg'",function(err, data){
+                if(err) throw err;
+                socket.emit("GetPCsResponse", data);
             });
         });
 

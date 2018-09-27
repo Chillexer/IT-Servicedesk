@@ -188,7 +188,27 @@ socket.on("OrderByIDResponse", function (data) { //Denne function står for at t
   });
   $("#form-new-edit").find("#hdd").val(Diskstring);
   $("#form-new-edit").find("#price").val(data[0][0].Price);
-  $("#form-new-edit").find("#status").append('<option value="' + data[0][0].Status + '">' + data[0][0].Status + '</option>');
+  var choice = "ny";
+  if(data[0][0].Status.toLowerCase() == "ny")
+  choice = "afsluttet";
+  $("#form-new-edit").find("#status").append('<option value="' + data[0][0].Status + '">' + data[0][0].Status + '</option><option value="'+choice+'">'+choice+'</option>');
+  $("#form-new-edit").find("#PC").append("<option>ingen</option>");
+  $("#form-new-edit").find("#status").off();
+  $("#form-new-edit").find("#PC").prop("disabled", true);
+  $("#form-new-edit").find("#status").change(function(){
+    if($(this).val() == "Ny")
+    $("#form-new-edit").find("#PC").prop("disabled", true);
+    else
+    $("#form-new-edit").find("#PC").prop("disabled", false);
+  });
+  socket.emit("GetPCs");
+});
+
+socket.on("GetPCsResponse", function(data){
+  data.forEach(element => {
+    $("#form-new-edit").find("#PC").append('<option value="'+element.ID+'">'+element.PCMake+ ' ' +element.PCModel+'</option>');
+  });
+    $("#form-new-edit").find("#PC").val(data[0][0].PC);
 });
 
 socket.on('UpdateOrderResponse', function(DATA){//Denne function står for at vise tab1 siden igen efter succesfuld opdatering af ordre

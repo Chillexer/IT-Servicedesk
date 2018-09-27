@@ -58,6 +58,7 @@ var Forms = {
       InputGen("hdd", "text"),
       InputGen("price", "text"),
       InputGen("status", "select"),
+      InputGen("PC", "select"),
       '<button id="btn-submit" ' +
       'class="btn btn-lg btn-primary btn-block" ' + 
       'type="submit">Gem</button>',

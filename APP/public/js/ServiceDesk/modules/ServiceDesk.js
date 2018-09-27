@@ -203,3 +203,29 @@ function DataInserter(Form, ID){
   };
   socket.emit(SQL[Form][0] ,SQL[Form][1]);
 }
+
+$("#search_text").keyup(function(){
+  var input, filter, table, tr, td, td2, i;
+  input = document.getElementById("search_text");
+  filter = input.value.toUpperCase();
+  table = document.getElementById(currenttab);
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    td2 = tr[i].getElementsByTagName("td")[3];
+    if (td || td2) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) == -1 && td2.innerHTML.toUpperCase().indexOf(filter) == -1) {
+        tr[i].style.display = "none";
+      } else {
+        tr[i].style.display = "";
+      }
+    } 
+  }
+});
+
+function search() {
+  // Declare variables 
+  
+}
